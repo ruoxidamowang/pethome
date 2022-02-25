@@ -67,6 +67,7 @@
     </el-pagination>
   </div>
 
+  <!--添加和修改模态框-->
   <el-dialog v-model="dialogFormVisible" title="修改部门">
     <el-form :model="form">
       <el-input type="hidden" v-model="form.id"></el-input>
