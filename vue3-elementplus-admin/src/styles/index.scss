@@ -1,0 +1,414 @@
+@import './element-variables.scss'; // 自定义文件，覆盖element-plus主题配置
+@import './variables.scss';
+@import './mixin.scss';
+@import './transition.scss';
+@import './element-ui.scss';
+@import './sidebar.scss';
+@import './btn.scss';
+
+body {
+	height: 100%;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	text-rendering: optimizeLegibility;
+	font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, Arial, sans-serif;
+}
+
+label {
+	font-weight: 700;
+}
+
+html {
+	height: 100%;
+	box-sizing: border-box;
+}
+
+#app {
+	height: 100%;
+}
+
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
+}
+
+ul,
+li,
+p {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+.no-padding {
+	padding: 0px !important;
+}
+
+.padding-content {
+	padding: 4px 0;
+}
+
+a:focus,
+a:active {
+	outline: none;
+}
+
+a,
+a:focus,
+a:hover {
+	cursor: pointer;
+	color: inherit;
+	text-decoration: none;
+}
+
+div:focus {
+	outline: none;
+}
+img {
+	border: 0;
+}
+.fr {
+	float: right;
+}
+
+.fl {
+	float: left;
+}
+
+.pr-5 {
+	padding-right: 5px;
+}
+
+.pl-5 {
+	padding-left: 5px;
+}
+
+.block {
+	display: block;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+.inlineBlock {
+	display: block;
+}
+
+.clearfix {
+	&:after {
+		visibility: hidden;
+		display: block;
+		font-size: 0;
+		content: ' ';
+		clear: both;
+		height: 0;
+	}
+}
+
+aside {
+	background: #eef1f6;
+	padding: 8px 24px;
+	margin-bottom: 20px;
+	border-radius: 2px;
+	display: block;
+	line-height: 32px;
+	font-size: 16px;
+	font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+		sans-serif;
+	color: #2c3e50;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	a {
+		color: #337ab7;
+		cursor: pointer;
+
+		&:hover {
+			color: rgb(32, 160, 255);
+		}
+	}
+}
+
+//main-container全局样式
+.app-container {
+	padding: 20px;
+}
+
+.components-container {
+	margin: 30px 50px;
+	position: relative;
+}
+
+.pagination-container {
+	margin-top: 30px;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.sub-navbar {
+	height: 50px;
+	line-height: 50px;
+	position: relative;
+	width: 100%;
+	text-align: right;
+	padding-right: 20px;
+	transition: 600ms ease position;
+	background: linear-gradient(90deg, rgba(32, 182, 249, 1) 0%, rgba(32, 182, 249, 1) 0%, rgba(33, 120, 241, 1) 100%, rgba(33, 120, 241, 1) 100%);
+
+	.subtitle {
+		font-size: 20px;
+		color: #fff;
+	}
+
+	&.draft {
+		background: #d0d0d0;
+	}
+
+	&.deleted {
+		background: #d0d0d0;
+	}
+}
+
+.link-type,
+.link-type:focus {
+	color: #337ab7;
+	cursor: pointer;
+
+	&:hover {
+		color: rgb(32, 160, 255);
+	}
+}
+
+.filter-container {
+	padding-bottom: 10px;
+
+	.filter-item {
+		display: inline-block;
+		vertical-align: middle;
+		margin-bottom: 10px;
+	}
+}
+
+//refine vue-multiselect plugin
+.multiselect {
+	line-height: 16px;
+}
+
+.multiselect--active {
+	z-index: 1000 !important;
+}
+
+.flex {
+	display: flex;
+}
+.flex-between {
+	justify-content: space-between;
+}
+.flex-col-center {
+	align-items: center;
+}
+.dj_space_evenly {
+	display: flex;
+	justify-content: space-evenly;
+}
+.dj_space_around {
+	display: flex;
+	justify-content: space-around;
+}
+
+.dj_space_between {
+	display: flex;
+	justify-content: space-between;
+}
+.dfa {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.dj_space_between_center {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.da {
+	display: flex;
+	align-items: center;
+}
+
+.mt20 {
+	margin-top: 20px;
+}
+.mt10 {
+	margin-top: 10px;
+}
+
+.mb10 {
+	margin-bottom: 10px;
+}
+.mr10 {
+	margin-right: 10px;
+}
+.ml10 {
+	margin-left: 10px;
+}
+.ml20 {
+	margin-left: 20px;
+}
+.mr20 {
+	margin-right: 20px;
+}
+.mb20 {
+	margin-bottom: 20px;
+}
+.pt10 {
+	padding-top: 10px;
+}
+.pl10 {
+	padding-left: 10px;
+}
+.pr10 {
+	padding-right: 10px;
+}
+.pb10 {
+	padding-bottom: 10px;
+}
+.pb20 {
+	padding-bottom: 20px;
+}
+.pt20 {
+	padding-top: 20px;
+}
+.pl20 {
+	padding-left: 20px;
+}
+.pr20 {
+	padding-right: 20px;
+}
+
+.plr20 {
+	padding-right: 20px;
+	padding-left: 20px;
+}
+.ptb10 {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+.p10 {
+	padding: 10px;
+}
+.p20 {
+	padding: 10px;
+}
+// * 星号
+.required-asterisk {
+	color: #f56c6c;
+}
+
+// 超出显示省略点
+.beyond {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.gray {
+	-webkit-filter: grayscale(100%);
+	-moz-filter: grayscale(100%);
+	-ms-filter: grayscale(100%);
+	-o-filter: grayscale(100%);
+	filter: grayscale(100%);
+	filter: progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);
+}
+
+// 去除选择autofill 的样式
+textarea:-webkit-autofill,
+select:-webkit-autofill,
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+	-webkit-box-shadow: 0 0 0 1000px rgba(179, 210, 252, 0) inset !important;
+	box-shadow: 0 0 0 1000px rgba(179, 210, 252, 0) inset !important;
+	-webkit-transition-delay: 9999s;
+	-webkit-transition: color 9999s ease-out, background-color 9999s ease-out;
+}
+// 删除提示弹窗样式
+.confirm-custom-class {
+	border: none;
+	.el-message-box__header {
+		height: 36px;
+		line-height: 36px;
+		box-sizing: border-box;
+		padding: 0;
+		padding-left: 25px;
+		background: $--color-primary;
+		.el-message-box__title {
+			font-size: 16px;
+			line-height: 36px;
+			font-family: PingFang SC;
+			font-weight: 400;
+			color: #fff;
+		}
+		.el-message-box__headerbtn {
+			top: 9px;
+			i {
+				width: 16px;
+				height: 16px;
+				border-radius: 50%;
+				text-align: center;
+				transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+				transform-origin: 100% 50%;
+				background-color: #bbcdff;
+				color: #5584ff;
+				cursor: pointer;
+				&::before {
+					opacity: 0.8;
+					transform: scale(0.8);
+					display: inline-block;
+				}
+				&:hover {
+					opacity: 1;
+					background-color: #dae0f0;
+					color: #486ece;
+				}
+			}
+		}
+	}
+	.el-message-box__content {
+		box-sizing: border-box;
+		padding: 40px 0 30px;
+		.el-message-box__message {
+			p {
+				font-size: 14px;
+				text-align: center;
+				font-weight: 300;
+				color: #333;
+			}
+		}
+	}
+	.el-message-box__btns {
+		display: flex;
+		justify-content: center;
+		// flex-flow: row-reverse;
+		padding-bottom: 10px;
+		button {
+			min-width: 100px;
+			height: 36px;
+			margin-left: 20px;
+			// font-size: 16px;
+		}
+		// & button:nth-child(1) {
+		// 	font-size: 16px;
+		// 	color: #fff;
+		// 	background-color: #58aae3;
+		// }
+		// & button:nth-child(2) {
+		// 	background-color: $--color-primary;
+		// }
+	}
+}

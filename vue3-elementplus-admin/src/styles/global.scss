@@ -1,0 +1,33 @@
+// flex布局
+@mixin flex-box($flex-flow: row nowrap, $justify-content: space-between, $align-items: center) {
+  display: flex;
+  flex-flow: $flex-flow;
+  justify-content: $justify-content;
+  align-items: $align-items;
+}
+
+// 单行省略
+@mixin single-line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// 多行省略
+@mixin mutle-line($line: 2) {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: $line;
+}
+
+// // margin
+// @mixin mg($direction: margin-right, $len: 30) {
+//   $direction: $len
+// }
+
+// // padding
+// @mixin pd($direction: padding-left, $len: 20) {
+//   $direction: $len
+// }

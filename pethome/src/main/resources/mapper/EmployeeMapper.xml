@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoxi.gm.mapper.EmployeeMapper">
+    <select id="loadAllEmp" resultType="com.ruoxi.gm.domain.Employee">
+        select id, username, email, phone, salt, password, age, state, department_id, logininfo_id, shop_id
+        from t_employee
+    </select>
+</mapper>

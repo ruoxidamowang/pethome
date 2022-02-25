@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/pet?useSSL=false&useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123456
+    type: com.zaxxer.hikari.HikariDataSource
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.ruoxi.gm.domain
+
+logging:
+  level:
+    com:
+      ruoxi: trace
+
+pagehelper:
+  #  方言
+  helper-dialect: mysql
+  #  分页合理化参数 自动纠错。
+  reasonable: true
+  #  支持接口传参
+  support-methods-arguments: true
