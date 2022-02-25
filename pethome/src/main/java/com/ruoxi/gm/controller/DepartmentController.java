@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 
 /**
  * @author 若兮
@@ -47,6 +48,17 @@ public class DepartmentController {
     private Result delete(@PathVariable("id") Long id) {
         try {
             service.del(id);
+            return Result.me();
+        } catch (Exception e) {
+            return Result.me(false).setMsg("删除失败-" + e.getCause());
+        }
+    }
+
+    @ApiOperation("根据id批量删除部门")
+    @DeleteMapping
+    private Result deletes(@RequestBody ArrayList<Long> ids) {
+        try {
+            service.removeAll(ids);
             return Result.me();
         } catch (Exception e) {
             return Result.me(false).setMsg("删除失败-" + e.getCause());

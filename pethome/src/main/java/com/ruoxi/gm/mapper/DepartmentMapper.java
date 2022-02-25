@@ -3,6 +3,7 @@ package com.ruoxi.gm.mapper;
 import com.ruoxi.gm.domain.Department;
 import com.ruoxi.gm.query.DepartmentQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,4 +15,6 @@ public interface DepartmentMapper {
     void remove(Long id);
     void update(Department d);
     List<Department> loadAll(DepartmentQuery query);
+
+    void dels(ArrayList<Long> ids);
 }

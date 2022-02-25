@@ -2,6 +2,9 @@
   <!--高级查询  行内表单-->
   <el-form :inline="true" :model="formInline" class="demo-form-inline">
     <el-form-item>
+      <el-button type="danger" @click="removeSelection">批量删除</el-button>
+    </el-form-item>
+    <el-form-item>
       <el-input v-model="formInline.name" placeholder="部门名称"></el-input>
     </el-form-item>
     <el-form-item>
@@ -23,15 +26,17 @@
   </el-form>
 
   <!--显示数据-->
-  <el-table :data="tableData" style="width: 100%">
-    <el-table-column prop="id" label="部门编号"/>
+  <el-table ref="multipleTableRef" table-layout="fixed" :data="tableData" @selection-change="handleSelectionChange"
+            style="width: 100%">
+    <el-table-column type="selection"/>
+    <el-table-column prop="id" sortable label="部门编号"/>
     <el-table-column prop="name" label="部门名称"/>
     <el-table-column prop="sn" label="部门介绍"/>
     <el-table-column prop="dirPath" label="部门路径"/>
     <el-table-column prop="state" label="部门状态">
       <template #default="scope">
         <label v-if="scope.row.state" style="color: green">启用</label>
-          <label v-else style="color: red">禁用</label>
+        <label v-else style="color: red">禁用</label>
       </template>
     </el-table-column>
     <el-table-column prop="manager.username" label="部门经理"/>
@@ -71,7 +76,7 @@
   </div>
 
   <!--添加和修改模态框-->
-  <el-dialog v-model="dialogFormVisible" title="修改部门">
+  <el-dialog v-model="dialogFormVisible" :title="title">
     <el-form :model="form">
       <el-input type="hidden" v-model="form.id"></el-input>
       <el-form-item label="部门名称" :label-width="formLabelWidth">
@@ -100,10 +105,10 @@
       </el-form-item>
 
       <el-form-item label="上级部门" :label-width="formLabelWidth">
-        <el-select v-model="value" class="m-2" placeholder="上级部门">
+        <el-select v-model="pid" class="m-2" placeholder="上级部门">
           <el-option
               v-for="item in parent"
-              :key="item.value"
+              :key="item.id"
               :label="item.name"
               :value="item.id"
           >
@@ -115,9 +120,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">关闭</el-button>
-        <el-button type="primary" @click="update(form.row)"
-        >保存</el-button
-        >
+        <el-button type="primary" @click="update(form.row)">保存</el-button>
       </span>
     </template>
   </el-dialog>
@@ -125,8 +128,8 @@
 </template>
 <script>
 import {onMounted, reactive, ref} from "vue";
-import {addOrEdit, loadAll, loadAllEmp, remove} from "@/api/dept";
-import {ElMessage} from "element-plus";
+import {addOrEdit, loadAll, loadAllEmp, remove, removeAll} from "@/api/dept";
+import {ElMessage, ElMessageBox} from "element-plus";
 
 export default {
   setup() {
@@ -138,16 +141,19 @@ export default {
     const disabled = ref(false)
     const tableData = ref()
     const formInline = reactive({
-      currentPage4:'',
-      pageSize4:'',
+      currentPage4: '',
+      pageSize4: '',
       name: '',
-      manager:'',
-      state:'',
+      manager: '',
+      state: '',
     })
     const state = ref(true)
-
+    const title = ref('')
     const value = ref('')
     const options = ref('')
+
+    const pid = ref('')
+    const parent = ref('')
 
     const dialogFormVisible = ref(false)
     const formLabelWidth = '140px'
@@ -168,8 +174,91 @@ export default {
       }),
     })
 
+    const multipleTableRef = ref()
+    const multipleSelection = ref()
+    const ids = ref([])
+
+    //批量删除
+    const removeSelection = () => {
+      ids.value = []
+      multipleSelection.value.forEach(dept => {
+        ids.value.push(dept.id)
+      })
+
+      ElMessageBox.confirm(
+          '确认删除所选部门吗？',
+          '批量删除',
+          {
+            confirmButtonText: '确定',
+            cancelButtonText: '关闭',
+            type: 'warning',
+          }
+      ).then(() => {
+        removeAll(ids.value).then(res => {
+          if (res.success) {
+            ElMessage.success("删除成功")
+            load(currentPage4.value, pageSize4.value)
+          } else {
+            ElMessage.error("删除失败")
+            load(currentPage4.value, pageSize4.value)
+            multipleSelection.value = ''
+            ids.value = []
+          }
+        }).catch(e => {
+          ElMessage.error("删除失败" + e)
+          load(currentPage4.value, pageSize4.value)
+          multipleSelection.value = ''
+          ids.value = []
+        })
+      }).catch(() => {
+        ElMessage.info("取消删除成功")
+        load(currentPage4.value, pageSize4.value)
+        multipleSelection.value = ''
+        ids.value = []
+      })
+    }
+
+    //获取所有选中的对象
+    const handleSelectionChange = (val) => {
+      multipleSelection.value = val
+    }
+
+    //添加部门
+    const add = () => {
+      //显示模态框
+      dialogFormVisible.value = true
+
+      //改变表单标题
+      title.value = '添加部门'
+
+      //清空表单数据
+      form.id = ''
+      form.name = ''
+      form.sn = ''
+      form.dirPath = ''
+      form.state = true
+
+      //查询所有经理显示在下拉框中
+      loadAllEmp().then(res => {
+        options.value = res.data
+        value.value = ''
+      })
+
+      //下拉框显示所有上级部门
+      loadAll({pageSize4: 1000}).then(res => {
+        parent.value = res.data.list
+        pid.value = ''
+      })
+    }
+
     //高级查询
-    const query = () => loadAll({'start': currentPage4.value, 'pageSize': pageSize4.value,'name':formInline.name,'manager':{'username':formInline.manager},'state':formInline.state}).then(res => {
+    const query = () => loadAll({
+      'start': currentPage4.value,
+      'pageSize': pageSize4.value,
+      'name': formInline.name,
+      'manager': {'username': formInline.manager},
+      'state': formInline.state
+    }).then(res => {
       total.value = res.data.total
       tableData.value = res.data.list
     }).catch(e => {
@@ -177,7 +266,13 @@ export default {
     })
 
     //查询所有并分页
-    const load = (start, pageSize) => loadAll({'start': start, 'pageSize': pageSize,'name':formInline.name,'manager':{'username':formInline.manager},'state':formInline.state}).then(res => {
+    const load = (start, pageSize) => loadAll({
+      'start': start,
+      'pageSize': pageSize,
+      'name': formInline.name,
+      'manager': {'username': formInline.manager},
+      'state': formInline.state
+    }).then(res => {
       total.value = res.data.total
       tableData.value = res.data.list
     }).catch(e => {
@@ -201,41 +296,52 @@ export default {
 
     //编辑回写
     const handleEdit = (index, row) => {
+      //显示编辑模态框
       dialogFormVisible.value = true
 
+      //设置模态框标题
+      title.value = '编辑部门'
+
+      //将数据回写到模态框表单中
       form.id = row.id
       form.name = row.name
       form.sn = row.sn
       form.dirPath = row.dirPath
-      form.state = row.state ? false : true
-
-      form.manager = row.manager?row.manager.username:'无'
-      form.parent = row.parent?row.parent.name:'无'
+      form.state = !!row.state
+      form.manager = row.manager ? row.manager.username : '无'
+      form.parent = row.parent ? row.parent.name : '无'
 
       //查询所有经理显示在下拉框中
       loadAllEmp().then(res => {
         options.value = res.data
-        value.value = row.manager.id
+        value.value = row.manager ? row.manager.id : '无'
+      })
+
+      //下拉框显示所有上级部门
+      loadAll({pageSize4: 1000}).then(res => {
+        parent.value = res.data.list
+        pid.value = row.parent ? row.parent.id : '无'
       })
     }
 
-    //编辑提交事件
+    //添加和修改提交
     const update = () => {
+      //关闭模态框
       dialogFormVisible.value = false
 
-      console.log(form)
-
+      //执行添加或修改
       addOrEdit({
         'id': form.id,
         'name': form.name,
         'sn': form.sn,
         'dirPath': form.dirPath,
-        'state': form.state ? 0 : 1,
+        'state': form.state ? 1 : 0,
         'manager': reactive({'id': value.value}),
-        'parent': reactive({'id': form.parent.id}),
+        'parent': reactive({'id': pid.value}),
       }).then(res => {
         if (res.success) {
           ElMessage.success("修改成功")
+          load(currentPage4.value, pageSize4.value)
         } else {
           ElMessage.success("修改失败")
         }
@@ -246,14 +352,22 @@ export default {
 
     //删除事件
     const handleDelete = (index, row) => {
-      remove(row.id).then(res=>{
+      remove(row.id).then(() => {
         ElMessage.success("删除成功")
-      }).catch(e=>{
+        load(currentPage4.value, pageSize4.value)
+      }).catch(e => {
         ElMessage.success("删除失败" + e)
       })
     }
 
     return {
+      removeSelection,
+      title,
+      multipleTableRef,
+      handleSelectionChange,
+      pid,
+      parent,
+      add,
       currentPage4,
       pageSize4,
       small,

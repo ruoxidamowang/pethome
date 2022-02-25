@@ -29,3 +29,11 @@ export function remove(id) {
 		method: 'delete',
 	})
 }
+
+export function removeAll(data) {
+	return request({
+		url: '/department',
+		method: 'delete',
+		data
+	})
+}

@@ -24,12 +24,14 @@
         insert into t_department (id, sn, name, dirPath, state, manager_id, parent_id)
         values (#{id}, #{sn}, #{name}, #{dirPath}, #{state}, #{manager.id}, #{parent.id});
     </insert>
+
     <!--void remove(Long id);-->
     <delete id="remove">
         delete
         from t_department
         where id = #{id};
     </delete>
+
     <!--void update(Department d);-->
     <update id="update">
         update t_department
@@ -41,6 +43,7 @@
             parent_id  = #{parent.id}
         where id = #{id};
     </update>
+
     <!--List<Department> loadAll();-->
     <select id="loadAll" resultMap="dept_map">
         SELECT
@@ -74,4 +77,13 @@
             </if>
         </where>
     </select>
+
+    <delete id="dels">
+        delete
+        from t_department
+        where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

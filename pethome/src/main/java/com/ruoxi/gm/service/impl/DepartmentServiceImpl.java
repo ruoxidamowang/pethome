@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -48,5 +49,11 @@ public class DepartmentServiceImpl implements IDepartmentService {
         List<Department> departments = mapper.loadAll(query);
         Page<Department> page= (Page<Department>) departments;
         return page.toPageInfo();
+    }
+
+    @Transactional
+    @Override
+    public void removeAll(ArrayList<Long> ids) {
+        mapper.dels(ids);
     }
 }
