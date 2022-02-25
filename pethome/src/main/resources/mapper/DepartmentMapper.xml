@@ -87,4 +87,9 @@
             #{id}
         </foreach>
     </delete>
+
+    <select id="selectAll" resultType="com.ruoxi.gm.domain.Department">
+        select id, sn, name, dirPath, state, manager_id, parent_id
+        from t_department
+    </select>
 </mapper>

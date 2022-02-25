@@ -56,4 +56,9 @@ public class DepartmentServiceImpl implements IDepartmentService {
     public void removeAll(ArrayList<Long> ids) {
         mapper.dels(ids);
     }
+
+    @Override
+    public List<Department> findAllDept() {
+        return mapper.selectAll();
+    }
 }

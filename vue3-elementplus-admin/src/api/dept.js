@@ -8,6 +8,13 @@ export function loadAll(data) {
 	})
 }
 
+export function findAll() {
+	return request({
+		url: '/department',
+		method: 'get',
+	})
+}
+
 export function loadAllEmp() {
 	return request({
 		url: '/employee',

@@ -17,4 +17,6 @@ public interface DepartmentMapper {
     List<Department> loadAll(DepartmentQuery query);
 
     void dels(ArrayList<Long> ids);
+
+    List<Department> selectAll();
 }

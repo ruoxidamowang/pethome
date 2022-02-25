@@ -5,10 +5,10 @@
       <el-button type="danger" @click="removeSelection">批量删除</el-button>
     </el-form-item>
     <el-form-item>
-      <el-input v-model="formInline.name" placeholder="部门名称"></el-input>
+      <el-input v-model="formInline.name" placeholder="部门名称" clearable></el-input>
     </el-form-item>
     <el-form-item>
-      <el-input v-model="formInline.manager" placeholder="部门经理"></el-input>
+      <el-input v-model="formInline.manager" placeholder="部门经理" clearable></el-input>
     </el-form-item>
     <el-form-item>
       <el-select v-model="formInline.state">
@@ -128,7 +128,7 @@
 </template>
 <script>
 import {onMounted, reactive, ref} from "vue";
-import {addOrEdit, loadAll, loadAllEmp, remove, removeAll} from "@/api/dept";
+import {addOrEdit, findAll, loadAll, loadAllEmp, remove, removeAll} from "@/api/dept";
 import {ElMessage, ElMessageBox} from "element-plus";
 
 export default {
@@ -245,8 +245,8 @@ export default {
       })
 
       //下拉框显示所有上级部门
-      loadAll({pageSize4: 1000}).then(res => {
-        parent.value = res.data.list
+      findAll().then(res => {
+        parent.value = res.data
         pid.value = ''
       })
     }
@@ -314,13 +314,13 @@ export default {
       //查询所有经理显示在下拉框中
       loadAllEmp().then(res => {
         options.value = res.data
-        value.value = row.manager ? row.manager.id : '无'
+        value.value = row.manager.id
       })
 
       //下拉框显示所有上级部门
-      loadAll({pageSize4: 1000}).then(res => {
-        parent.value = res.data.list
-        pid.value = row.parent ? row.parent.id : '无'
+      findAll().then(res => {
+        parent.value = res.data
+        pid.value = row.parent.id
       })
     }
 

@@ -70,4 +70,10 @@ public class DepartmentController {
     private Result findByPage(@RequestBody DepartmentQuery query) {
         return Result.me(service.findByPage(query));
     }
+
+    @ApiOperation("查询所有部门信息")
+    @GetMapping
+    private Result findAll() {
+        return Result.me(service.findAllDept());
+    }
 }

@@ -5,6 +5,7 @@ import com.ruoxi.gm.domain.Department;
 import com.ruoxi.gm.query.DepartmentQuery;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author 若兮
@@ -17,4 +18,6 @@ public interface IDepartmentService {
     PageInfo<Department> findByPage(DepartmentQuery query);
 
     void removeAll(ArrayList<Long> ids);
+
+    List<Department> findAllDept();
 }
