@@ -76,6 +76,7 @@
                 and te.username like concat('%',#{manager.username},'%')
             </if>
         </where>
+        order by state desc
     </select>
 
     <delete id="dels">
