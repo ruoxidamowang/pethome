@@ -17,6 +17,9 @@
     <el-form-item>
       <el-button type="primary" @click="query">查询</el-button>
     </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="add">添加</el-button>
+    </el-form-item>
   </el-form>
 
   <!--显示数据-->
@@ -27,8 +30,8 @@
     <el-table-column prop="dirPath" label="部门路径"/>
     <el-table-column prop="state" label="部门状态">
       <template #default="scope">
-        <el-button v-if="scope.row.state" style="background-color:green;color: white">启用</el-button>
-          <el-button v-else style="background-color:red;color: white">禁用</el-button>
+        <label v-if="scope.row.state" style="color: green">启用</label>
+          <label v-else style="color: red">禁用</label>
       </template>
     </el-table-column>
     <el-table-column prop="manager.username" label="部门经理"/>
@@ -166,7 +169,7 @@ export default {
     })
 
     //高级查询
-    const query = () => loadAll({'start': currentPage4.value, 'pageSize': pageSize4.value,'name':formInline.name,'manager_id':formInline.manager,'state':formInline.state}).then(res => {
+    const query = () => loadAll({'start': currentPage4.value, 'pageSize': pageSize4.value,'name':formInline.name,'manager':{'username':formInline.manager},'state':formInline.state}).then(res => {
       total.value = res.data.total
       tableData.value = res.data.list
     }).catch(e => {
@@ -174,7 +177,7 @@ export default {
     })
 
     //查询所有并分页
-    const load = (start, pageSize) => loadAll({'start': start, 'pageSize': pageSize,'name':formInline.name,'manager_id':formInline.manager,'state':formInline.state}).then(res => {
+    const load = (start, pageSize) => loadAll({'start': start, 'pageSize': pageSize,'name':formInline.name,'manager':{'username':formInline.manager},'state':formInline.state}).then(res => {
       total.value = res.data.total
       tableData.value = res.data.list
     }).catch(e => {
