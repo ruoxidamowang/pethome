@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import {createRouter, createWebHashHistory, createWebHistory} from 'vue-router'
 import {dynamicRoutes, staticRoutes} from './routes'
 
 // 返回上一级页面的浏览位置
@@ -28,7 +28,7 @@ dynamicRoutes.forEach(a=>{
 const router = createRouter({
 	// routes: staticRoutes, // 添加静态路由
 	routes: myRoutes, // 添加静态路由
-	history: createWebHashHistory(), // hash 模式
+	history: createWebHistory(), // hash 模式
 	scrollBehavior
 })
 

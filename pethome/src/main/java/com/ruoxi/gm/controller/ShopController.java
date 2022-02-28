@@ -1,9 +1,9 @@
 package com.ruoxi.gm.controller;
 
 import com.ruoxi.basic.common.Result;
-import com.ruoxi.gm.domain.Department;
-import com.ruoxi.gm.query.DepartmentQuery;
-import com.ruoxi.gm.service.IDepartmentService;
+import com.ruoxi.gm.domain.Shop;
+import com.ruoxi.gm.query.ShopQuery;
+import com.ruoxi.gm.service.IShopService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
@@ -16,25 +16,25 @@ import java.util.ArrayList;
  * @create 2022-02-21 14:43
  */
 @RestController
-@RequestMapping("/department")
-@Api(tags = "部门接口")
-public class DepartmentController {
+@RequestMapping("/shop")
+@Api(tags = "店铺接口")
+public class ShopController {
     @Resource
-    private IDepartmentService service;
+    private IShopService service;
 
-    @ApiOperation(value = "部门添加或修改",notes = "有id则为修改，没有id则为添加")
+    @ApiOperation(value = "店铺添加或修改",notes = "有id则为修改，没有id则为添加")
     @PutMapping
-    private Result addOrUpdate(@RequestBody Department department) {
-        if (department.getId() != null) {
+    private Result addOrUpdate(@RequestBody Shop shop) {
+        if (shop.getId() != null) {
             try {
-                service.update(department);
+                service.update(shop);
                 return Result.me();
             } catch (Exception e) {
                 return Result.me(false).setMsg("更新失败-" + e.getCause());
             }
         } else {
             try {
-                service.add(department);
+                service.add(shop);
                 return Result.me();
             } catch (Exception e) {
                 return Result.me(false).setMsg("添加失败-" + e.getCause());
@@ -42,7 +42,7 @@ public class DepartmentController {
         }
     }
 
-    @ApiOperation("根据id删除部门")
+    @ApiOperation("根据id删除店铺")
     @DeleteMapping("/{id}")
     private Result delete(@PathVariable("id") Long id) {
         try {
@@ -53,7 +53,7 @@ public class DepartmentController {
         }
     }
 
-    @ApiOperation("根据id批量删除部门")
+    @ApiOperation("根据id批量删除店铺")
     @DeleteMapping
     private Result deletes(@RequestBody ArrayList<Long> ids) {
         try {
@@ -64,15 +64,15 @@ public class DepartmentController {
         }
     }
 
-    @ApiOperation("分页查询部门")
+    @ApiOperation("分页查询店铺")
     @PostMapping
-    private Result findByPage(@RequestBody DepartmentQuery query) {
+    private Result findByPage(@RequestBody ShopQuery query) {
         return Result.me(service.findByPage(query));
     }
 
-    @ApiOperation("查询所有部门信息")
+    @ApiOperation("查询所有店铺信息")
     @GetMapping
     private Result findAll() {
-        return Result.me(service.findAllDept());
+        return Result.me(service.findAllShop());
     }
 }

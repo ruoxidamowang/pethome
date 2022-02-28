@@ -99,19 +99,25 @@ export const dynamicRoutes = [
       },
       {
         path: 'role',
-        component: () => import('@/views/button'),
+        component: () => import('@/views/button/index'),
         name: 'Role',
         meta: { title: '角色管理', noCache: true,icon: 'el-icon-user' },
       },
       {
         path: 'permission',
-        component: () => import('@/views/Tree'),
+        component: () => import('@/views/Tree/index'),
         name: 'Permission',
         meta: { title: '权限管理', noCache: true ,icon: 'el-icon-lock'},
       },
       {
+        path: 'shop',
+        component: () => import('@/views/shop/add'),
+        name: 'Shop',
+        meta: { title: '店铺申请', noCache: true ,icon: 'el-icon-s-grid'},
+      },
+      {
         path: 'menu',
-        component: () => import('@/views/table'),
+        component: () => import('@/views/table/index'),
         name: 'Menu',
         meta: { title: '菜单管理', noCache: true ,icon: 'el-icon-s-grid'},
       },

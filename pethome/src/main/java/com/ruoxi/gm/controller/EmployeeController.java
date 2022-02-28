@@ -1,6 +1,6 @@
 package com.ruoxi.gm.controller;
 
-import com.ruoxi.gm.common.Result;
+import com.ruoxi.basic.common.Result;
 import com.ruoxi.gm.service.IEmployeeService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;

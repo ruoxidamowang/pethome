@@ -1,4 +1,4 @@
-package com.ruoxi.gm.common;
+package com.ruoxi.basic.common;
 
 /**
  * @author ruoxi

@@ -13,7 +13,7 @@ public class Shop {
     private Long id;
     private String name;
     private String tel;
-    private Date registerTime;
+    private Date registerTime = new Date();
     private Integer state;
     private String address;
     private String logo;

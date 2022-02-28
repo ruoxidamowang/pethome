@@ -63,9 +63,6 @@
             left join t_employee te on td.manager_id = te.id
             left join t_department td2 on td.parent_id = td2.id
         <where>
-            <!--<if test="id != null and id.trim() != ''">
-                and td.id = #{id}
-            </if>-->
             <if test="name != null and name.trim() != ''">
                 and td.name like concat('%',#{name},'%')
             </if>
