@@ -33,7 +33,7 @@ export function remove(id) {
 
 export function removeAll(data) {
 	return request({
-		url: '/department',
+		url: '/shop',
 		method: 'delete',
 		data
 	})

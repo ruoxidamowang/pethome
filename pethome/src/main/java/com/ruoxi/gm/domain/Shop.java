@@ -1,6 +1,8 @@
 package com.ruoxi.gm.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -18,4 +20,14 @@ public class Shop {
     private String address;
     private String logo;
     private Employee admin;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public void setRegisterTime(Date registerTime) {
+        this.registerTime = registerTime;
+    }
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    public Date getRegisterTime() {
+        return registerTime;
+    }
 }

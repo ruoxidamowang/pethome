@@ -28,3 +28,16 @@ pagehelper:
   reasonable: true
   #  支持接口传参
   support-methods-arguments: true
+
+fdfs:
+  # 读取时间
+  so-timeout: 1500
+  # 连接超时时间
+  connect-timeout: 600
+  # 缩略图
+  thumb-image:
+  width: 150
+  height: 150
+  # Tracker 服务，确保 tracker storage nginx 已经启动
+  tracker-list:
+    - 34.80.47.178:22122

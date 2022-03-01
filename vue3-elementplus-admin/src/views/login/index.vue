@@ -36,7 +36,8 @@
 				</el-form-item>
 			</el-tooltip>
 
-			<el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.prevent="handleLogin">登录</el-button>
+			<el-button :loading="loading" type="primary" style="width:48%;margin-bottom:30px;" @click.prevent="handleLogin">登录</el-button>
+			<el-button :loading="loading" type="primary" style="width:48%;margin-bottom:30px;" @click.prevent="registerShop">注册店铺</el-button>
 
 			<div style="position:relative">
 				<div class="tips">
@@ -149,20 +150,26 @@ export default {
 			})
 		}
 
+    function registerShop() {
+      router.replace({ path: '/admin/add' })
+      loading.value = false
+    }
+
 		return {
 			loginFormDom,
-			usernameDom,
-			passwordDom,
-			loginForm,
-			loginRules,
-			passwordType,
-			capsTooltip,
-			loading,
-			showDialog,
-			showPwd,
-			checkCapslock,
-			handleLogin
-		}
+      usernameDom,
+      passwordDom,
+      loginForm,
+      loginRules,
+      passwordType,
+      capsTooltip,
+      loading,
+      showDialog,
+      showPwd,
+      checkCapslock,
+      handleLogin,
+      registerShop,
+    }
 	}
 }
 </script>

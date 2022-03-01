@@ -3,6 +3,13 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoxi.gm.mapper.EmployeeMapper">
+    <!--void save(Employee e);-->
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into t_employee (username, email, phone, salt, password, age, state, department_id, logininfo_id, shop_id)
+        values (#{username},#{email},#{phone},#{salt},#{password},#{age},#{state},#{department.id},#{logininfo.id},#{shop.id});
+    </insert>
+
+    <!--List<Employee> loadAllEmp();-->
     <select id="loadAllEmp" resultType="com.ruoxi.gm.domain.Employee">
         select id, username, email, phone, salt, password, age, state, department_id, logininfo_id, shop_id
         from t_employee

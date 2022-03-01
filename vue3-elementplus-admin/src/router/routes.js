@@ -111,8 +111,14 @@ export const dynamicRoutes = [
       },
       {
         path: 'shop',
-        component: () => import('@/views/shop/add'),
+        component: () => import('@/views/shop/index'),
         name: 'Shop',
+        meta: { title: '店铺管理', noCache: true ,icon: 'el-icon-s-grid'},
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/shop/add'),
+        name: 'Add',
         meta: { title: '店铺申请', noCache: true ,icon: 'el-icon-s-grid'},
       },
       {

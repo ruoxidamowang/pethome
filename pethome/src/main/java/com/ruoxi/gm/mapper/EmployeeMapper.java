@@ -9,5 +9,6 @@ import java.util.List;
  * @create 2022-02-24 14:32
  */
 public interface EmployeeMapper {
+    void save(Employee e);
     List<Employee> loadAllEmp();
 }

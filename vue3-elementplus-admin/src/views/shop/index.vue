@@ -5,10 +5,10 @@
       <el-button type="danger" @click="removeSelection">批量删除</el-button>
     </el-form-item>
     <el-form-item>
-      <el-input v-model="formInline.name" placeholder="部门名称" clearable></el-input>
+      <el-input v-model="formInline.name" placeholder="店铺名称" clearable></el-input>
     </el-form-item>
     <el-form-item>
-      <el-input v-model="formInline.manager" placeholder="部门经理" clearable></el-input>
+      <el-input v-model="formInline.username" placeholder="店铺经理" clearable></el-input>
     </el-form-item>
     <el-form-item>
       <el-select v-model="formInline.state">
@@ -29,18 +29,19 @@
   <el-table ref="multipleTableRef" table-layout="fixed" :data="tableData" @selection-change="handleSelectionChange"
             style="width: 100%">
     <el-table-column type="selection"/>
-    <el-table-column prop="id" sortable label="部门编号"/>
-    <el-table-column prop="name" label="部门名称"/>
-    <el-table-column prop="sn" label="部门介绍"/>
-    <el-table-column prop="dirPath" label="部门路径"/>
-    <el-table-column prop="state" label="部门状态">
+    <el-table-column prop="id" sortable label="店铺编号"/>
+    <el-table-column prop="name" label="店铺名称"/>
+    <el-table-column prop="tel" label="店铺电话"/>
+    <el-table-column prop="registerTime" label="注册时间"/>
+    <el-table-column prop="state" label="店铺状态">
       <template #default="scope">
         <label v-if="scope.row.state" style="color: green">启用</label>
         <label v-else style="color: red">禁用</label>
       </template>
     </el-table-column>
-    <el-table-column prop="manager.username" label="部门经理"/>
-    <el-table-column prop="parent.name" label="上级部门"/>
+    <el-table-column prop="address" label="店铺地址"/>
+    <el-table-column prop="logo" label="店铺logo"/>
+    <el-table-column prop="admin.username" label="管理人员"/>
     <el-table-column label="操作">
       <template #default="scope">
         <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
@@ -79,43 +80,24 @@
   <el-dialog v-model="dialogFormVisible" :title="title">
     <el-form :model="form">
       <el-input type="hidden" v-model="form.id"></el-input>
-      <el-form-item label="部门名称" :label-width="formLabelWidth">
+      <el-form-item label="店铺名称" :label-width="formLabelWidth">
         <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="部门介绍" :label-width="formLabelWidth">
-        <el-input v-model="form.sn" autocomplete="off"></el-input>
+      <el-form-item label="店铺电话" :label-width="formLabelWidth">
+        <el-input v-model="form.tel" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="部门路径" :label-width="formLabelWidth">
-        <el-input v-model="form.dirPath" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="部门状态" :label-width="formLabelWidth">
+      <el-form-item label="店铺状态" :label-width="formLabelWidth">
         <el-switch v-model="state" inline-prompt active-text="启用" inactive-text="禁用"></el-switch>
       </el-form-item>
-
-      <el-form-item label="部门经理" :label-width="formLabelWidth">
-        <el-select v-model="value" class="m-2" placeholder="部门经理">
-          <el-option
-              v-for="item in options"
-              :key="item.id"
-              :label="item.username"
-              :value="item.id"
-          >
-          </el-option>
-        </el-select>
+      <el-form-item label="店铺地址" :label-width="formLabelWidth">
+        <el-input v-model="form.address" autocomplete="off"></el-input>
       </el-form-item>
-
-      <el-form-item label="上级部门" :label-width="formLabelWidth">
-        <el-select v-model="pid" class="m-2" placeholder="上级部门">
-          <el-option
-              v-for="item in parent"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-          >
-          </el-option>
-        </el-select>
+      <el-form-item label="店铺logo" :label-width="formLabelWidth">
+        <el-input v-model="form.logo" autocomplete="off"></el-input>
       </el-form-item>
-
+      <el-form-item label="管理人员" :label-width="formLabelWidth">
+        <el-input v-model="form.admin.username" autocomplete="off"></el-input>
+      </el-form-item>
     </el-form>
     <template #footer>
       <span class="dialog-footer">
@@ -128,8 +110,8 @@
 </template>
 <script>
 import {onMounted, reactive, ref} from "vue";
-import {addOrEdit, findAll, loadAll, loadAllEmp, remove, removeAll} from "@/api/dept";
 import {ElMessage, ElMessageBox} from "element-plus";
+import {addOrEdit, loadAll, remove, removeAll} from "@/api/shop";
 
 export default {
   setup() {
@@ -139,21 +121,16 @@ export default {
     const small = ref(false)
     const background = ref(true)
     const disabled = ref(false)
-    const tableData = ref()
+    const tableData = ref('')
     const formInline = reactive({
       currentPage4: '',
       pageSize4: '',
       name: '',
-      manager: '',
+      username: '',
       state: '',
     })
     const state = ref(true)
     const title = ref('')
-    const value = ref('')
-    const options = ref('')
-
-    const pid = ref('')
-    const parent = ref('')
 
     const dialogFormVisible = ref(false)
     const formLabelWidth = '140px'
@@ -161,16 +138,14 @@ export default {
     const form = reactive({
       id: '',
       name: '',
-      sn: '',
-      dirPath: '',
+      tel: '',
+      registerTime: '',
       state: state,
-      manager: reactive({
+      address: '',
+      logo: '',
+      admin: reactive({
         id: '',
         username: '',
-      }),
-      parent: reactive({
-        id: '',
-        name: '',
       }),
     })
 
@@ -186,7 +161,7 @@ export default {
       })
 
       ElMessageBox.confirm(
-          '确认删除所选部门吗？',
+          '确认删除所选店铺吗？',
           '批量删除',
           {
             confirmButtonText: '确定',
@@ -223,32 +198,23 @@ export default {
       multipleSelection.value = val
     }
 
-    //添加部门
+    //添加店铺
     const add = () => {
       //显示模态框
       dialogFormVisible.value = true
 
       //改变表单标题
-      title.value = '添加部门'
+      title.value = '添加店铺'
 
       //清空表单数据
       form.id = ''
       form.name = ''
-      form.sn = ''
-      form.dirPath = ''
+      form.tel = ''
       form.state = true
-
-      //查询所有经理显示在下拉框中
-      loadAllEmp().then(res => {
-        options.value = res.data
-        value.value = ''
-      })
-
-      //下拉框显示所有上级部门
-      findAll().then(res => {
-        parent.value = res.data
-        pid.value = ''
-      })
+      form.address = ''
+      form.logo = ''
+      form.admin.id = ''
+      form.admin.username = ''
     }
 
     //高级查询
@@ -256,7 +222,7 @@ export default {
       'start': currentPage4.value,
       'pageSize': pageSize4.value,
       'name': formInline.name,
-      'manager': {'username': formInline.manager},
+      'admin': {'username': formInline.username},
       'state': formInline.state
     }).then(res => {
       total.value = res.data.total
@@ -270,11 +236,12 @@ export default {
       'start': start,
       'pageSize': pageSize,
       'name': formInline.name,
-      'manager': {'username': formInline.manager},
+      'manager': {'username': formInline.username},
       'state': formInline.state
     }).then(res => {
       total.value = res.data.total
       tableData.value = res.data.list
+      tableData.value.registerTime
     }).catch(e => {
       console.log(e)
     })
@@ -300,28 +267,18 @@ export default {
       dialogFormVisible.value = true
 
       //设置模态框标题
-      title.value = '编辑部门'
+      title.value = '编辑店铺'
 
       //将数据回写到模态框表单中
       form.id = row.id
       form.name = row.name
-      form.sn = row.sn
-      form.dirPath = row.dirPath
+      form.tel = row.tel
+      form.registerTime = row.registerTime
       form.state = !!row.state
-      form.manager = row.manager ? row.manager.username : '无'
-      form.parent = row.parent ? row.parent.name : '无'
-
-      //查询所有经理显示在下拉框中
-      loadAllEmp().then(res => {
-        options.value = res.data
-        value.value = row.manager.id
-      })
-
-      //下拉框显示所有上级部门
-      findAll().then(res => {
-        parent.value = res.data
-        pid.value = row.parent.id
-      })
+      form.address = row.address
+      form.logo = row.logo
+      form.admin.id = row.admin.id
+      form.admin.username = row.admin.username
     }
 
     //添加和修改提交
@@ -333,20 +290,20 @@ export default {
       addOrEdit({
         'id': form.id,
         'name': form.name,
-        'sn': form.sn,
-        'dirPath': form.dirPath,
+        'tel': form.tel,
         'state': form.state ? 1 : 0,
-        'manager': reactive({'id': value.value}),
-        'parent': reactive({'id': pid.value}),
+        'address': form.address,
+        'logo': form.logo,
+        'admin': {"id":form.admin.id}
       }).then(res => {
         if (res.success) {
           ElMessage.success("修改成功")
           load(currentPage4.value, pageSize4.value)
         } else {
-          ElMessage.success("修改失败")
+          ElMessage.error("修改失败" + res.msg)
         }
       }).catch(e => {
-        ElMessage.success("修改失败" + e)
+        ElMessage.error("修改失败" + e)
       })
     }
 
@@ -365,8 +322,6 @@ export default {
       title,
       multipleTableRef,
       handleSelectionChange,
-      pid,
-      parent,
       add,
       currentPage4,
       pageSize4,
@@ -383,8 +338,6 @@ export default {
       form,
       state,
       update,
-      value,
-      options,
       tableData,
       formInline,
       query,

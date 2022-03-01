@@ -343,10 +343,10 @@ export default {
           ElMessage.success("修改成功")
           load(currentPage4.value, pageSize4.value)
         } else {
-          ElMessage.success("修改失败")
+          ElMessage.error("修改失败"+res.msg)
         }
       }).catch(e => {
-        ElMessage.success("修改失败" + e)
+        ElMessage.error("修改失败" + e)
       })
     }
 

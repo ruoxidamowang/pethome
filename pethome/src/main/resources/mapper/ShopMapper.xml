@@ -62,7 +62,7 @@
                 and te.username like concat('%',#{admin.username},'%')
             </if>
         </where>
-        order by state desc
+        order by registerTime desc
     </select>
 
     <!--void dels(ArrayList<Long> ids);-->

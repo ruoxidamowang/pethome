@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.ruoxi.gm.domain.Shop;
+import com.ruoxi.gm.mapper.EmployeeMapper;
 import com.ruoxi.gm.mapper.ShopMapper;
 import com.ruoxi.gm.query.ShopQuery;
 import com.ruoxi.gm.service.IShopService;
@@ -24,10 +25,13 @@ import java.util.List;
 public class ShopServiceImpl implements IShopService {
     @Resource
     private ShopMapper mapper;
+    @Resource
+    private EmployeeMapper employeeMapper;
 
     @Override
     @Transactional
     public void add(Shop s) {
+        employeeMapper.save(s.getAdmin());
         mapper.save(s);
     }
 

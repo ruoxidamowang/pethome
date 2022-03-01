@@ -10,7 +10,11 @@ import lombok.Data;
  */
 @Data
 public class ShopQuery extends BaseQuery {
+    private Long id;
     private String name;
+    private String tel;
     private Integer state;
+    private String address;
+    private String logo;
     private Employee admin;
 }
