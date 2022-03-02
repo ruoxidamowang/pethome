@@ -69,7 +69,7 @@
 
 import {reactive, ref} from "vue";
 import router from "@/router";
-import {addOrEdit} from "@/api/shop";
+import {addOrEdit, delLogo} from "@/api/shop";
 import {ElMessage} from "element-plus";
 
 export default {
@@ -231,12 +231,18 @@ export default {
       router.replace({path: '/login'})
     }
 
-    const handleSuccess = (response, file, fileList) => {
+    const handleSuccess = (response) => {
       ruleForm.logo = response.data.fullPath
     }
 
-    const handleRemove = (file, fileList) => {
-      console.log(file, fileList)
+    const handleRemove = (file) => {
+      if (file.response != null){
+        delLogo(file.response.data.fullPath.value).then(res=>{
+          ElMessage.success(res.msg)
+        }).catch(e=>{
+          ElMessage.error(e.msg)
+        })
+      }
     }
     const handlePreview = (file) => {
       console.log(file)

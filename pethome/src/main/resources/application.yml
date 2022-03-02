@@ -11,6 +11,16 @@ spring:
   mvc:
     pathmatch:
       matching-strategy: ANT_PATH_MATCHER
+  mail:
+    host: smtp.qq.com
+    username: 2435169750@qq.com
+    password: liygplzrmyiteadb                   # 填写客户端的授权码
+    default-encoding: utf-8
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable: true
 
 mybatis:
   mapper-locations: classpath*:mapper/*.xml

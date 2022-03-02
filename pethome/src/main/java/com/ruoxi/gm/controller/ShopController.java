@@ -50,11 +50,12 @@ public class ShopController {
     }
 
     @ApiOperation("根据id删除店铺")
-    @DeleteMapping("/{id}")
-    private Result delete(@PathVariable("id") Long id) {
+    @DeleteMapping("delShop")
+    private Result delete(@RequestParam Long id,@RequestParam String path) {
         try {
             service.del(id);
-            return Result.me();
+            fastFileStorageClient.deleteFile("http://34.80.47.178/"+path);
+            return Result.me().setMsg("删除成功！");
         } catch (Exception e) {
             return Result.me(false).setMsg("删除失败-" + e.getCause());
         }
@@ -96,14 +97,14 @@ public class ShopController {
     }
 
     @ApiOperation("店铺logo删除")
-    @PostMapping("delLogo")
-    private Result delLogo(@RequestBody MultipartFile file) {
-        String suffix = file.getOriginalFilename().split("[.]")[1];
+    @DeleteMapping("delLogo")
+    private Result delLogo(@RequestBody String path) {
         try {
-            StorePath path = fastFileStorageClient.uploadFile(file.getInputStream(), file.getSize(), suffix, null);
-            return Result.me(path).setMsg("上传成功！");
-        } catch (IOException e) {
-            return Result.me(false).setMsg("上传失败！"+e.getCause());
+            fastFileStorageClient.deleteFile("http://34.80.47.178/"+path);
+            return Result.me().setMsg("删除成功！");
+        } catch (Exception e) {
+            return Result.me(false).setMsg("删除失败！"+e.getCause());
         }
+
     }
 }

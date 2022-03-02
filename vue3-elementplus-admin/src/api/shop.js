@@ -24,10 +24,22 @@ export function addOrEdit(data) {
 	})
 }
 
-export function remove(id) {
+export function delShop(id,path) {
 	return request({
-		url: `/shop/${id}`,
+		url: '/shop/delShop',
 		method: 'delete',
+		params: {
+			id:id,
+			path:path
+		}
+	})
+}
+
+export function delLogo(path) {
+	return request({
+		url: '/shop',
+		method: 'delete',
+		path
 	})
 }
 

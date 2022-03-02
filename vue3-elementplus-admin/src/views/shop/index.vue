@@ -47,9 +47,9 @@
         <el-image
             style="width: 100%; height: 100%"
             :src="'http://34.80.47.178/'+scope.row.logo"
-            :preview-src-list="srcList"
+            :preview-src-list="'http://34.80.47.178/'+srcList"
             :initial-index="0"
-            fit="fill"
+            fit="contain"
         ></el-image>
       </template>
     </el-table-column>
@@ -132,7 +132,7 @@
 <script>
 import {onMounted, reactive, ref} from "vue";
 import {ElMessage, ElMessageBox} from "element-plus";
-import {addOrEdit, loadAll, remove, removeAll} from "@/api/shop";
+import {addOrEdit, loadAll, delShop, removeAll} from "@/api/shop";
 
 export default {
   setup() {
@@ -152,7 +152,7 @@ export default {
     })
     const title = ref('')
 
-    const srcList = ref(['http://34.80.47.178/group1/M00/00/00/CowAB2Id43eAHrngAAm5oPb8HVQ171.jpg'])
+    const srcList = ref([])
 
     const dialogFormVisible = ref(false)
     const formLabelWidth = '140px'
@@ -330,8 +330,8 @@ export default {
 
     //删除事件
     const handleDelete = (index, row) => {
-      remove(row.id).then(() => {
-        ElMessage.success("删除成功")
+      delShop(row.id,row.logo).then(res => {
+        ElMessage.success(res.msg)
         load(currentPage4.value, pageSize4.value)
       }).catch(e => {
         ElMessage.success("删除失败" + e)
@@ -362,9 +362,9 @@ export default {
     }
 
     const states = ref([
-      {id: '0', value: '禁用'},
-      {id: '1', value: '启用'},
-      {id: '2', value: '待审核'},
+      {id: 0, value: '禁用'},
+      {id: 1, value: '启用'},
+      {id: 2, value: '待审核'},
     ])
 
     return {
