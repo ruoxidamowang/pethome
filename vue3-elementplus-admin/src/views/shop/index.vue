@@ -15,6 +15,7 @@
         <el-option label="请选择状态" value=""></el-option>
         <el-option label="禁用" value="0"></el-option>
         <el-option label="启用" value="1"></el-option>
+        <el-option label="待审核" value="2"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item>
@@ -32,18 +33,33 @@
     <el-table-column prop="id" sortable label="店铺编号"/>
     <el-table-column prop="name" label="店铺名称"/>
     <el-table-column prop="tel" label="店铺电话"/>
-    <el-table-column prop="registerTime" label="注册时间"/>
-    <el-table-column prop="state" label="店铺状态">
+    <el-table-column prop="registerTime" label="注册时间" sortable/>
+    <el-table-column prop="state" label="店铺状态" sortable>
       <template #default="scope">
-        <label v-if="scope.row.state" style="color: green">启用</label>
-        <label v-else style="color: red">禁用</label>
+        <label v-if="scope.row.state===1" style="color: green">启用</label>
+        <label v-else-if="scope.row.state===0" style="color: red">禁用</label>
+        <label v-else style="color: orange">待审核</label>
       </template>
     </el-table-column>
     <el-table-column prop="address" label="店铺地址"/>
-    <el-table-column prop="logo" label="店铺logo"/>
-    <el-table-column prop="admin.username" label="管理人员"/>
-    <el-table-column label="操作">
+    <el-table-column prop="logo" label="店铺logo">
       <template #default="scope">
+        <el-image
+            style="width: 100%; height: 100%"
+            :src="'http://34.80.47.178/'+scope.row.logo"
+            :preview-src-list="srcList"
+            :initial-index="0"
+            fit="fill"
+        ></el-image>
+      </template>
+    </el-table-column>
+    <el-table-column prop="admin.username" label="管理人员"/>
+    <el-table-column label="操作" width="210px">
+      <template #default="scope">
+        <el-button v-if="scope.row.state===2" type="success" size="small" @click="handlePass(scope.$index, scope.row)">
+          通过
+        </el-button>
+        <el-button v-else type="success" disabled size="small">通过</el-button>
         <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
         <el-popconfirm title="确定要删除吗?"
                        confirm-button-text="确定"
@@ -87,13 +103,18 @@
         <el-input v-model="form.tel" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="店铺状态" :label-width="formLabelWidth">
-        <el-switch v-model="state" inline-prompt active-text="启用" inactive-text="禁用"></el-switch>
+        <el-select v-model="form.state" class="m-2" placeholder="店铺状态">
+          <el-option
+              v-for="item in states"
+              :key="item.id"
+              :label="item.value"
+              :value="item.id"
+          >
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="店铺地址" :label-width="formLabelWidth">
         <el-input v-model="form.address" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item label="店铺logo" :label-width="formLabelWidth">
-        <el-input v-model="form.logo" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="管理人员" :label-width="formLabelWidth">
         <el-input v-model="form.admin.username" autocomplete="off"></el-input>
@@ -129,8 +150,9 @@ export default {
       username: '',
       state: '',
     })
-    const state = ref(true)
     const title = ref('')
+
+    const srcList = ref(['http://34.80.47.178/group1/M00/00/00/CowAB2Id43eAHrngAAm5oPb8HVQ171.jpg'])
 
     const dialogFormVisible = ref(false)
     const formLabelWidth = '140px'
@@ -140,7 +162,7 @@ export default {
       name: '',
       tel: '',
       registerTime: '',
-      state: state,
+      state: '',
       address: '',
       logo: '',
       admin: reactive({
@@ -210,7 +232,7 @@ export default {
       form.id = ''
       form.name = ''
       form.tel = ''
-      form.state = true
+      form.state = ''
       form.address = ''
       form.logo = ''
       form.admin.id = ''
@@ -241,7 +263,6 @@ export default {
     }).then(res => {
       total.value = res.data.total
       tableData.value = res.data.list
-      tableData.value.registerTime
     }).catch(e => {
       console.log(e)
     })
@@ -274,7 +295,7 @@ export default {
       form.name = row.name
       form.tel = row.tel
       form.registerTime = row.registerTime
-      form.state = !!row.state
+      form.state = row.state
       form.address = row.address
       form.logo = row.logo
       form.admin.id = row.admin.id
@@ -291,10 +312,10 @@ export default {
         'id': form.id,
         'name': form.name,
         'tel': form.tel,
-        'state': form.state ? 1 : 0,
+        'state': form.state,
         'address': form.address,
         'logo': form.logo,
-        'admin': {"id":form.admin.id}
+        'admin': {"id": form.admin.id}
       }).then(res => {
         if (res.success) {
           ElMessage.success("修改成功")
@@ -317,7 +338,38 @@ export default {
       })
     }
 
+    //审核事件
+    const handlePass = (index, row) => {
+      //修改状态为启用
+      addOrEdit({
+        'id': row.id,
+        'name': row.name,
+        'tel': row.tel,
+        'state': 1,
+        'address': row.address,
+        'logo': row.logo,
+        'admin': {"id": row.admin.id}
+      }).then(res => {
+        if (res.success) {
+          ElMessage.success("通过成功")
+          load(currentPage4.value, pageSize4.value)
+        } else {
+          ElMessage.error("通过失败" + res.msg)
+        }
+      }).catch(e => {
+        ElMessage.error("通过失败" + e)
+      })
+    }
+
+    const states = ref([
+      {id: '0', value: '禁用'},
+      {id: '1', value: '启用'},
+      {id: '2', value: '待审核'},
+    ])
+
     return {
+      states,
+      handlePass,
       removeSelection,
       title,
       multipleTableRef,
@@ -336,11 +388,11 @@ export default {
       dialogFormVisible,
       formLabelWidth,
       form,
-      state,
       update,
       tableData,
       formInline,
       query,
+      srcList,
     }
   }
 }

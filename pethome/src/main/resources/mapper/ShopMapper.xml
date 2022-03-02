@@ -20,7 +20,7 @@
     <!--void save(Shop s);-->
     <insert id="save">
         insert into t_shop (id, name, tel, registerTime, state, address, logo, admin_id)
-        values (#{id}, #{name}, #{tel}, #{registerTime}, #{state}, #{address}, #{logo}, #{admin.id})
+        values (#{id}, #{name}, #{tel}, #{registerTime}, 2, #{address}, #{logo}, #{admin.id})
     </insert>
 
     <!--void remove(Long id);-->
@@ -55,7 +55,7 @@
             <if test="name != null and name.trim() != ''">
                 and ts.name like concat('%',#{name},'%')
             </if>
-            <if test="state != '' and state != null">
+            <if test="state != null">
                 and ts.state = #{state}
             </if>
             <if test="admin != null and admin.username != null and admin.username.trim() != ''">

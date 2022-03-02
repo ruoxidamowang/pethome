@@ -33,7 +33,7 @@ fdfs:
   # 读取时间
   so-timeout: 1500
   # 连接超时时间
-  connect-timeout: 600
+  connect-timeout: 6000
   # 缩略图
   thumb-image:
   width: 150

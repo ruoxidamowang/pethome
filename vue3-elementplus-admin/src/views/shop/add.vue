@@ -1,5 +1,4 @@
 <template>
-  <img src="http://34.80.47.178/group1/M00/00/00/CowAB2IdyFqAJpQ5AAm5oPb8HVQ02..jpg" width="600" height="360">
   <el-form
       ref="ruleFormRef"
       :model="ruleForm"
@@ -31,8 +30,30 @@
     <el-form-item label="店铺电话" prop="tel">
       <el-input v-model="ruleForm.tel" clearable></el-input>
     </el-form-item>
-    <el-form-item label="店铺logo" prop="logo">
-      <el-input v-model="ruleForm.logo"></el-input>
+    <el-form-item label="店铺logo">
+      <el-upload
+          ref="upload"
+          class="upload-demo"
+          action="http://localhost:8080/shop/upload"
+          :on-success="handleSuccess"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :on-exceed="handleExceed"
+          :file-list="fileList"
+          list-type="picture"
+          :auto-upload="false"
+          :limit="1"
+      >
+        <template #trigger>
+          <el-button type="primary">选择店铺logo</el-button>
+        </template>
+        <el-button class="ml-3" type="success" @click="submitUpload">上传</el-button>
+        <template #tip>
+          <div class="el-upload__tip" style="color: red">
+            仅保留上传的最后一张图片
+          </div>
+        </template>
+      </el-upload>
     </el-form-item>
     <el-form-item label="店铺地址" prop="address">
       <el-input v-model="ruleForm.address"></el-input>
@@ -154,19 +175,6 @@ export default {
           trigger: 'blur',
         },
       ],
-      logo: [
-        {
-          required: true,
-          message: '请输入店铺logo',
-          trigger: 'blur',
-        },
-        {
-          min: 3,
-          max: 16,
-          message: '长度应该在3-16之间',
-          trigger: 'blur',
-        },
-      ],
       address: [
         {
           required: true,
@@ -185,57 +193,84 @@ export default {
     const submitForm = (formEl) => {
       if (!formEl) return
       formEl.validate((valid) => {
-        if (valid) {
-          addOrEdit({
-            name: ruleForm.name,
-            tel: ruleForm.tel,
-            logo: ruleForm.logo,
-            address: ruleForm.address,
-            admin: reactive({
-              username: ruleForm.username,
-              email: ruleForm.email,
-              phone: ruleForm.phone,
-              password: ruleForm.password,
-            })
-          }).then(res => {
-              if (res.success) {
-                ElMessage.success("注册成功！")
-                router.replace({path: '/login'})
-              } else {
-                ElMessage.error("注册失败！")
-              }
-            }).catch(e => {
-              ElMessage.error("注册失败！" + e)
-            })
+            if (valid) {
+              addOrEdit({
+                name: ruleForm.name,
+                tel: ruleForm.tel,
+                logo: ruleForm.logo,
+                address: ruleForm.address,
+                admin: reactive({
+                  username: ruleForm.username,
+                  email: ruleForm.email,
+                  phone: ruleForm.phone,
+                  password: ruleForm.password,
+                })
+              }).then(res => {
+                if (res.success) {
+                  ElMessage.success("注册成功！")
+                  router.replace({path: '/login'})
+                } else {
+                  ElMessage.error("注册失败！")
+                }
+              }).catch(e => {
+                ElMessage.error("注册失败！" + e)
+              })
+            } else {
+              return false
+            }
           }
-        else
-          {
-            return false
-          }
-        }
       )
-      }
+    }
 
-      const resetForm = (formEl) => {
-        if (!formEl) return
-        formEl.resetFields()
-      }
+    const resetForm = (formEl) => {
+      if (!formEl) return
+      formEl.resetFields()
+    }
 
-      const back = () => {
-        router.replace({path: '/login'})
-      }
+    const back = () => {
+      router.replace({path: '/login'})
+    }
 
-      return {
-        formSize,
-        ruleForm,
-        ruleFormRef,
-        rules,
-        submitForm,
-        resetForm,
-        back,
-      }
+    const handleSuccess = (response, file, fileList) => {
+      ruleForm.logo = response.data.fullPath
+    }
+
+    const handleRemove = (file, fileList) => {
+      console.log(file, fileList)
+    }
+    const handlePreview = (file) => {
+      console.log(file)
+    }
+
+    const upload = ref()
+    const fileList = ref([])
+
+    const handleExceed = (files) => {
+      upload.value.clearFiles()
+      upload.value.handleStart(files[0])
+    }
+    const submitUpload = () => {
+      upload.value.submit()
+    }
+
+    return {
+      fileList,
+      upload,
+      handleExceed,
+      submitUpload,
+      formSize,
+      ruleForm,
+      ruleFormRef,
+      rules,
+      submitForm,
+      resetForm,
+      back,
+      handleRemove,
+      handlePreview,
+      handleSuccess,
     }
   }
+}
 </script>
 
 <style scoped>
