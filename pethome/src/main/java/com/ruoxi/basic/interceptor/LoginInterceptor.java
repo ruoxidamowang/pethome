@@ -7,6 +7,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author 若兮
@@ -21,7 +22,7 @@ public class LoginInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String token = request.getHeader("X-token");
         if (token != null && redisTemplate.opsForValue().get(token) != null) {
-
+            redisTemplate.expire(token, 30, TimeUnit.MINUTES);
             return true;
         } else {
             response.setContentType("application/json;charset=utf-8");
