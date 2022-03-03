@@ -1,7 +1,7 @@
 const { VUE_APP_BASE_TITLE } = process.env
 
 module.exports = {
-	title: VUE_APP_BASE_TITLE || 'Vue3 ElementPlus Admin',
+	title: VUE_APP_BASE_TITLE || '宠物之家',
 
 	/**
 	 * @type {boolean} true | false

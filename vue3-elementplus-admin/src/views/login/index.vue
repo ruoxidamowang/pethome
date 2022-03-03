@@ -2,7 +2,7 @@
 	<div class="login-container">
 		<el-form ref="loginFormDom" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 			<div class="title-container">
-				<h3 class="title">Vue3 ElementPlus Admin</h3>
+				<h3 class="title">宠 物 之 家</h3>
 			</div>
 
 			<el-form-item prop="username">
@@ -72,7 +72,7 @@ import { nextTick, onMounted, reactive, ref, toRefs, unref, watchEffect } from '
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 const validateUsername = (rule, value, callback) => {
-	if (!validUsername(value)) {
+	if (value == null || value.trim() == '') {
 		callback(new Error('请输入用户名'))
 	} else {
 		callback()
@@ -95,8 +95,8 @@ export default {
 		const usernameDom = ref(null)
 		const passwordDom = ref(null)
 		const loginForm = reactive({
-			username: 'admin',
-			password: '111111'
+			username: '17671794587',
+			password: '123456'
 		})
 		const loginRules = reactive({
 			username: [{ required: true, trigger: 'blur', validator: validateUsername }],

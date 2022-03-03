@@ -32,28 +32,4 @@ public class MD5Utils {
             return null;
         }
     }
-
-    public static void main(String[] args) {
-
-        //加密
-        //1 生成随机盐值
-        String pwd = "1";
-        String salt = StrUtils.getComplexRandomString(32); //盐，，，随机串，安全
-        //2 通过这个盐值加密
-        String md5Pwd = MD5Utils.encrypByMd5(pwd + "chen" + salt + "hao");
-        System.out.println(md5Pwd);//密文
-        //密码比对
-        //1 查询盐值-就是salt
-        String saltTmp = salt;
-        //3 加密比对
-        String pwdTmp = "1";
-        String inputMd5Pwd = MD5Utils.encrypByMd5(pwdTmp + "chen" + saltTmp + "hao");
-        if (inputMd5Pwd.equals(md5Pwd)) {
-            System.out.println("登录成功!");
-        } else {
-            System.out.println("密码错误");
-        }
-    }
-
-
 }

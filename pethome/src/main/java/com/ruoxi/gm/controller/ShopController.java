@@ -89,8 +89,15 @@ public class ShopController {
     private Result logoUpload(@RequestBody MultipartFile file) {
         String suffix = file.getOriginalFilename().split("[.]")[1];
         try {
-            StorePath path = fastFileStorageClient.uploadFile(file.getInputStream(), file.getSize(), suffix, null);
-            return Result.me(path).setMsg("上传成功！");
+            StorePath path =
+                    fastFileStorageClient.uploadFile(file.getInputStream(),
+                            file.getSize(),
+                            suffix,
+                            null);
+            if (path!=null){
+                return Result.me(path).setMsg("上传成功！");
+            }
+            return Result.me(false).setMsg("上传失败！");
         } catch (IOException e) {
             return Result.me(false).setMsg("上传失败！"+e.getCause());
         }

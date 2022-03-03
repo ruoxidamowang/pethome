@@ -105,6 +105,8 @@
           <element id="library" level="project" name="Maven: io.projectreactor:reactor-core:3.4.14" />
           <element id="library" level="project" name="Maven: org.reactivestreams:reactive-streams:1.0.3" />
           <element id="library" level="project" name="Maven: cn.hutool:hutool-all:5.7.18" />
+          <element id="library" level="project" name="Maven: commons-httpclient:commons-httpclient:2.0.2" />
+          <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.0.3" />
         </element>
       </element>
       <element id="directory" name="META-INF">
