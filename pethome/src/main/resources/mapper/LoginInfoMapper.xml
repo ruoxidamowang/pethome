@@ -17,6 +17,6 @@
     <!--LoginInfo findByUsernameOrPhoneOrEmail(UserQuery query);-->
     <select id="findByUsernameOrPhoneOrEmail" resultType="com.ruoxi.gm.query.UserQuery">
         select id, username, phone, email, salt, password, type, disable
-        from t_logininfo where username=#{username} or phone = #{username} or email = #{username}
+        from t_logininfo where (username=#{username} or phone = #{username} or email = #{username}) and type = #{type}
     </select>
 </mapper>

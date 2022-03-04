@@ -34,7 +34,7 @@ const actions = {
 		console.log('登陆', userInfo)
 		const { username, password } = userInfo
 		return new Promise((resolve, reject) => {
-			login({ username: username.trim(), password: password })
+			login({ username: username.trim(), password: password ,type:0})
 				.then(response => {
 					const { data } = response
 					if (!data) {

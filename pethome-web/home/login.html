@@ -73,7 +73,6 @@
             const form = Vue.reactive({
                 username: '',
                 password: '',
-                type: 1
             })
 
             const login = () => {
@@ -83,7 +82,7 @@
                     data: {
                         username: form.username,
                         password: form.password,
-                        type: form.type
+                        type: 1
                     }
                 }).then(res => {
                     if (res.data.success) {
