@@ -36,13 +36,20 @@
                     <li><a href="">手机号注册</a></li>
                 </ul>
 
-                <div class="am-tabs-bd">
+                <div class="am-tabs-bd" id="emailRegister">
                     <div class="am-tab-panel am-active">
                         <form method="post">
 
                             <div class="user-email">
                                 <label for="email"><i class="am-icon-envelope-o"></i></label>
                                 <input type="email" name="" id="email" placeholder="请输入邮箱账号">
+                            </div>
+                            <div class="verification">
+                                <label for="code"><i class="am-icon-code-fork"></i></label>
+                                <input type="tel" name="" id="eamilCode" v-model="form.code" placeholder="请输入验证码">
+                                <button type="button" :disabled="flag" class="btn" @click="getCode" id="dyMobileButton">
+                                    {{num}}
+                                </button>
                             </div>
                             <div class="user-pass">
                                 <label for="password"><i class="am-icon-lock"></i></label>
