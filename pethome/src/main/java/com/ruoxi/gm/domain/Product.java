@@ -9,23 +9,23 @@ import java.util.Date;
 
 /**
  * @author 若兮
- * @create 2022-03-02 15:05
+ * @create 2022-03-07 9:48
  */
 @Data
-public class User implements Serializable {
+public class Product implements Serializable {
     private Long id;
-    private String username;
-    private String email;
-    private String phone;
-    private String salt;
-    private String password;
+    private String name;
+    private String resources;
+    private Double saleprice;
+    private Date offsaletime;
+    private Date onsaletime;
     private Integer state;
-    private Integer age;
+    private String costprice;
     private Date createtime = new Date();
-    private String headImg;
-    private LoginInfo logininfo;
+    private Long salecount;
+    private ProductDetail productDetail;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     public Date getCreatetime() {
         return createtime;
     }

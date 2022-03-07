@@ -86,8 +86,9 @@
                     }
                 }).then(res => {
                     if (res.data.success) {
-                        localStorage.setItem("token",res.data.data.token)
-                        localStorage.setItem("username",form.username)
+                        alert(res.data.data.token)
+                        localStorage.setItem("X-token", res.data.data.token)
+                        localStorage.setItem("username", form.username)
                         location.href = "../home/index.html"
                     } else {
                         console.log("请输入正确的用户名或密码！")

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -11,7 +12,7 @@ import java.util.Date;
  * @create 2022-02-21 16:52
  */
 @Data
-public class Shop {
+public class Shop implements Serializable {
     private Long id;
     private String name;
     private String tel;

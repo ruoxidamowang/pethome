@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoxi.gm.mapper.ProductMapper">
+    <resultMap id="product_map" type="com.ruoxi.gm.domain.Product">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="resources" column="resources"/>
+        <result property="saleprice" column="saleprice"/>
+        <result property="offsaletime" column="offsaletime"/>
+        <result property="onsaletime" column="onsaletime"/>
+        <result property="state" column="state"/>
+        <result property="costprice" column="costprice"/>
+        <result property="createtime" column="createtime"/>
+        <result property="salecount" column="salecount"/>
+        <association property="productDetail" javaType="com.ruoxi.gm.domain.ProductDetail">
+            <id property="id" column="pdid"/>
+            <result property="intro" column="intro"/>
+            <result property="orderNotice" column="orderNotice"/>
+        </association>
+    </resultMap>
+
+
+    <insert id="save">
+        insert into t_product (name, resources, saleprice, offsaletime, onsaletime, state, costprice, createtime,
+                               salecount)
+        values (#{name}, #{resources}, #{saleprice}, #{offsaletime}, #{onsaletime}, #{state}, #{costprice},
+                #{createtime},
+                #{salecount});
+    </insert>
+
+
+    <delete id="remove">
+        delete
+        from t_product
+        where id = #{id}
+    </delete>
+
+
+    <update id="update">
+
+    </update>
+
+    <!--List<Product> loadAll(ProductQuery query);-->
+    <select id="loadAll" resultMap="product_map">
+        SELECT tp.id,
+               tp.name,
+               tp.resources,
+               tp.saleprice,
+               tp.offsaletime,
+               tp.onsaletime,
+               tp.state,
+               tp.costprice,
+               tp.createtime,
+               tp.salecount,
+               tpd.id pdid,
+               tpd.product_id,
+               tpd.intro,
+               tpd.orderNotice
+        FROM `t_product` tp,
+             `t_product_detail` tpd
+        WHERE tp.id = tpd.product_id
+    </select>
+
+
+    <delete id="dels">
+
+    </delete>
+
+
+    <select id="selectAll" resultType="com.ruoxi.gm.domain.Product">
+
+    </select>
+</mapper>

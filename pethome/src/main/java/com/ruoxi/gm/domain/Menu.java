@@ -2,12 +2,14 @@ package com.ruoxi.gm.domain;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author 若兮
  * @create 2022-02-21 17:06
  */
 @Data
-public class Menu {
+public class Menu implements Serializable {
     private Long id;
     private String name;
     private String url;

@@ -116,6 +116,12 @@ export const dynamicRoutes = [
         meta: { title: '店铺管理', noCache: true ,icon: 'el-icon-s-grid'},
       },
       {
+        path: 'product',
+        component: () => import('@/views/product/index'),
+        name: 'Product',
+        meta: { title: '产品管理', noCache: true ,icon: 'el-icon-s-grid'},
+      },
+      {
         path: 'add',
         component: () => import('@/views/shop/add'),
         name: 'Add',
