@@ -5,10 +5,10 @@
       <el-button type="danger" @click="removeSelection">批量删除</el-button>
     </el-form-item>
     <el-form-item>
-      <el-input v-model="formInline.name" placeholder="店铺名称" clearable></el-input>
+      <el-input v-model="formInline.name" placeholder="产品名称" clearable></el-input>
     </el-form-item>
     <el-form-item>
-      <el-input v-model="formInline.username" placeholder="店铺经理" clearable></el-input>
+      <el-input v-model="formInline.username" placeholder="产品经理" clearable></el-input>
     </el-form-item>
     <el-form-item>
       <el-select v-model="formInline.state">
@@ -30,36 +30,22 @@
   <el-table ref="multipleTableRef" table-layout="fixed" :data="tableData" @selection-change="handleSelectionChange"
             style="width: 100%">
     <el-table-column type="selection"/>
-    <el-table-column prop="id" sortable label="店铺编号"/>
-    <el-table-column prop="name" label="店铺名称"/>
-    <el-table-column prop="tel" label="店铺电话"/>
-    <el-table-column prop="registerTime" label="注册时间" sortable/>
-    <el-table-column prop="state" label="店铺状态" sortable>
+    <el-table-column prop="id" label="产品编号" sortable/>
+    <el-table-column prop="name" label="产品名称"/>
+    <el-table-column prop="costprice" label="产品成本" sortable/>
+    <el-table-column prop="saleprice" label="产品售价" sortable/>
+    <el-table-column prop="salecount" label="产品销量" sortable/>
+    <el-table-column prop="state" label="产品状态" sortable>
       <template #default="scope">
         <label v-if="scope.row.state===1" style="color: green">启用</label>
         <label v-else-if="scope.row.state===0" style="color: red">禁用</label>
         <label v-else style="color: orange">待审核</label>
       </template>
     </el-table-column>
-    <el-table-column prop="address" label="店铺地址"/>
-    <el-table-column prop="logo" label="店铺logo">
-      <template #default="scope">
-        <el-image
-            style="width: 100%; height: 100%"
-            :src="'http://34.80.47.178/'+scope.row.logo"
-            :preview-src-list="'http://34.80.47.178/'+srcList"
-            :initial-index="0"
-            fit="contain"
-        ></el-image>
-      </template>
-    </el-table-column>
-    <el-table-column prop="admin.username" label="管理人员"/>
+    <el-table-column prop="onsaletime" label="上架时间" sortable/>
+    <el-table-column prop="offsaletime" label="下架时间" sortable/>
     <el-table-column label="操作" width="210px">
       <template #default="scope">
-        <el-button v-if="scope.row.state===2" type="success" size="small" @click="handlePass(scope.$index, scope.row)">
-          通过
-        </el-button>
-        <el-button v-else type="success" disabled size="small">通过</el-button>
         <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
         <el-popconfirm title="确定要删除吗?"
                        confirm-button-text="确定"
@@ -96,14 +82,14 @@
   <el-dialog v-model="dialogFormVisible" :title="title">
     <el-form :model="form">
       <el-input type="hidden" v-model="form.id"></el-input>
-      <el-form-item label="店铺名称" :label-width="formLabelWidth">
+      <el-form-item label="产品名称" :label-width="formLabelWidth">
         <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="店铺电话" :label-width="formLabelWidth">
+      <el-form-item label="产品电话" :label-width="formLabelWidth">
         <el-input v-model="form.tel" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="店铺状态" :label-width="formLabelWidth">
-        <el-select v-model="form.state" class="m-2" placeholder="店铺状态">
+      <el-form-item label="产品状态" :label-width="formLabelWidth">
+        <el-select v-model="form.state" class="m-2" placeholder="产品状态">
           <el-option
               v-for="item in states"
               :key="item.id"
@@ -113,7 +99,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="店铺地址" :label-width="formLabelWidth">
+      <el-form-item label="产品地址" :label-width="formLabelWidth">
         <el-input v-model="form.address" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="管理人员" :label-width="formLabelWidth">
@@ -160,14 +146,18 @@ export default {
     const form = reactive({
       id: '',
       name: '',
-      tel: '',
-      registerTime: '',
-      state: '',
-      address: '',
-      logo: '',
-      admin: reactive({
+      resources:'',
+      saleprice:'',
+      offsaletime:'',
+      onsaletime:'',
+      state:'',
+      costprice:'',
+      createtime:'',
+      salecount:'',
+      productDetail: reactive({
         id: '',
-        username: '',
+        intro: '',
+        orderNotice: '',
       }),
     })
 
@@ -183,7 +173,7 @@ export default {
       })
 
       ElMessageBox.confirm(
-          '确认删除所选店铺吗？',
+          '确认删除所选产品吗？',
           '批量删除',
           {
             confirmButtonText: '确定',
@@ -220,13 +210,13 @@ export default {
       multipleSelection.value = val
     }
 
-    //添加店铺
+    //添加产品
     const add = () => {
       //显示模态框
       dialogFormVisible.value = true
 
       //改变表单标题
-      title.value = '添加店铺'
+      title.value = '添加产品'
 
       //清空表单数据
       form.id = ''
@@ -288,7 +278,7 @@ export default {
       dialogFormVisible.value = true
 
       //设置模态框标题
-      title.value = '编辑店铺'
+      title.value = '编辑产品'
 
       //将数据回写到模态框表单中
       form.id = row.id

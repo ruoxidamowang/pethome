@@ -61,6 +61,7 @@
         FROM `t_product` tp,
              `t_product_detail` tpd
         WHERE tp.id = tpd.product_id
+        order by state desc
     </select>
 
 

@@ -10,7 +10,7 @@ export function loadAll(data) {
 
 export function findAll() {
 	return request({
-		url: '/shop',
+		url: '/product',
 		method: 'get',
 	})
 }
@@ -18,7 +18,7 @@ export function findAll() {
 
 export function addOrEdit(data) {
 	return request({
-		url: '/shop',
+		url: '/product',
 		method: 'put',
 		data,
 	})
@@ -26,7 +26,7 @@ export function addOrEdit(data) {
 
 export function delShop(id,path) {
 	return request({
-		url: '/shop/delShop',
+		url: '/product/delProduct',
 		method: 'delete',
 		params: {
 			id:id,
@@ -37,7 +37,7 @@ export function delShop(id,path) {
 
 export function delLogo(path) {
 	return request({
-		url: '/shop',
+		url: '/product',
 		method: 'delete',
 		path
 	})
@@ -45,7 +45,7 @@ export function delLogo(path) {
 
 export function removeAll(data) {
 	return request({
-		url: '/shop',
+		url: '/product',
 		method: 'delete',
 		data
 	})
