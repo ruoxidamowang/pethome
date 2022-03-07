@@ -19,4 +19,10 @@
         select id, username, phone, email, salt, password, type, disable
         from t_logininfo where (username=#{username} or phone = #{username} or email = #{username}) and type = #{type}
     </select>
+
+    <!--LoginInfo selectUserByEmail(String email);-->
+    <select id="selectUserByEmail" resultType="com.ruoxi.gm.domain.LoginInfo">
+        select id, username, phone, email, salt, password, type, disable
+        from t_logininfo where email = #{email}
+    </select>
 </mapper>

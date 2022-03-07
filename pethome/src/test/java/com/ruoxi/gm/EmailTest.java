@@ -30,11 +30,11 @@ public class EmailTest {
         //设置发送人
         mailMessage.setFrom("2435169750@qq.com");
         //邮件主题
-        mailMessage.setSubject("新型冠状病毒防护指南");
+        mailMessage.setSubject("斯塔克工业登录验证码");
         //邮件内容
-        mailMessage.setText("好好在家待着.....");
+        mailMessage.setText("【斯塔克工业】您的登录验证码为："+8888);
         //收件人
-        mailMessage.setTo("2435169750@qq.com");
+        mailMessage.setTo("3104116215@qq.com");
         javaMailSender.send(mailMessage);
     }
 
@@ -48,7 +48,7 @@ public class EmailTest {
         helper.setSubject("若兮");
         //"D:\test\bizhi.jpg"
         //http://img30.360buyimg.com/popWaterMark/jfs/t1/67988/7/14094/232759/5db64acfE6ab2b09e/38b5cb3dc38b4b1f.jpg"
-        helper.setText("<h1>I need young woman.</h1>",true);
+        helper.setText("<h1>若兮大魔王</h1>",true);
         //添加附件
         helper.addAttachment("壁纸.jpg",new File("D:\\test\\bizhi.jpg"));
 

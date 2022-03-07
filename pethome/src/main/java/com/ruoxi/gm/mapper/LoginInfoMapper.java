@@ -13,4 +13,6 @@ public interface LoginInfoMapper {
     LoginInfo selectUserByPhone(String phone);
 
     UserQuery findByUsernameOrPhoneOrEmail(UserQuery query);
+
+    LoginInfo selectUserByEmail(String email);
 }

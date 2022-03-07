@@ -26,7 +26,7 @@
 </div>
 
 <div class="res-banner">
-    <div class="res-main">
+    <div class="res-main" id="register">
         <div class="login-banner-bg"><span></span><img src="../images/big.jpg"/></div>
         <div class="login-box">
 
@@ -36,44 +36,48 @@
                     <li><a href="">手机号注册</a></li>
                 </ul>
 
-                <div class="am-tabs-bd" id="emailRegister">
+                <div class="am-tabs-bd">
                     <div class="am-tab-panel am-active">
                         <form method="post">
 
                             <div class="user-email">
                                 <label for="email"><i class="am-icon-envelope-o"></i></label>
-                                <input type="email" name="" id="email" placeholder="请输入邮箱账号">
+                                <input type="email" name="" v-model="eform.email" id="email" placeholder="请输入邮箱账号">
                             </div>
                             <div class="verification">
                                 <label for="code"><i class="am-icon-code-fork"></i></label>
-                                <input type="tel" name="" id="eamilCode" v-model="form.code" placeholder="请输入验证码">
-                                <button type="button" :disabled="flag" class="btn" @click="getCode" id="dyMobileButton">
-                                    {{num}}
+                                <input type="tel" name="" id="eamilCode" v-model="eform.ecode" placeholder="请输入验证码">
+                                <button type="button" :disabled="eflag" class="btn" @click="getEmailCode"
+                                        id="dyMobileButton">
+                                    {{emailNum}}
                                 </button>
                             </div>
                             <div class="user-pass">
                                 <label for="password"><i class="am-icon-lock"></i></label>
-                                <input type="password" name="" id="password" placeholder="设置密码">
+                                <input type="password" name="" v-model="eform.epassword"
+                                       placeholder="设置密码">
                             </div>
                             <div class="user-pass">
                                 <label for="passwordRepeat"><i class="am-icon-lock"></i></label>
-                                <input type="password" name="" id="passwordRepeat" placeholder="确认密码">
+                                <input type="password" name="" v-model="eform.erepassword"
+                                       placeholder="确认密码">
                             </div>
 
                         </form>
 
                         <div class="login-links">
                             <label for="reader-me">
-                                <input id="reader-me" type="checkbox"> 点击表示您同意商城《服务协议》
+                                <input  type="checkbox" v-model="ceflag"> 点击表示您同意商城《服务协议》
                             </label>
                         </div>
                         <div class="am-cf">
-                            <input type="submit" name="" value="注册" class="am-btn am-btn-primary am-btn-sm am-fl">
+                            <input type="submit" name="" @click="emailRegister" value="注册"
+                                   class="am-btn am-btn-primary am-btn-sm am-fl">
                         </div>
 
                     </div>
 
-                    <div class="am-tab-panel" id="register">
+                    <div class="am-tab-panel">
                         <form method="post">
                             <div class="user-phone">
                                 <label for="phone"><i class="am-icon-mobile-phone am-icon-md"></i></label>
@@ -109,118 +113,319 @@
                         <hr>
                     </div>
 
-                    <script>
-                        $(function () {
-                            $('#doc-my-tabs').tabs();
-                        })
-
-                        Vue.createApp({
-                            setup() {
-                                const checkPhone = () => {
-                                    if (form.phone != null && form.phone != '') {
-                                        return true
-                                    }
-                                    alert("请输入手机号")
-                                    return false
-                                }
-                                const checkCode = () => {
-                                    if (form.code != null && form.code != '') {
-                                        return true
-                                    }
-                                    alert("请输入验证码")
-                                    return false
-                                }
-                                const checkPassword = () => {
-                                    if (form.password != null && form.password != '') {
-                                        return true
-                                    }
-                                    alert("请输入密码")
-                                    return false
-                                }
-                                const checkRePassword = () => {
-                                    if (form.repassword != null && form.repassword != '' && form.password === form.repassword) {
-                                        return true
-                                    }
-                                    alert("确认密码与密码不一致，请重新输入")
-                                    return false
-                                }
-
-                                const form = Vue.reactive({
-                                    phone: '',
-                                    code: '',
-                                    password: '',
-                                    repassword: '',
-                                })
-                                const cflag = Vue.ref(false)
-                                const flag = Vue.ref(false)
-                                const num = Vue.ref('获取')
-
-                                //点击获取验证码按钮
-                                const getCode = () => {
-                                    if (checkPhone()) {
-                                        axios({
-                                            url: "http://localhost:8080/user/code/" + form.phone,
-                                            method: 'get',
-                                        }).then(res => {
-                                            alert(res.data.msg)
-                                        }).catch(e => {
-                                            alert(e)
-                                        })
-                                        //设置点击获取后60秒倒计时
-                                        flag.value = true
-                                        num.value = 60
-                                        let clock = setInterval(() => {
-                                            num.value--
-                                            if (num.value <= 0) {
-                                                clearInterval(clock)
-                                                num.value = '获取'
-                                                flag.value = false
-                                            }
-                                        }, 1000)
-                                    }
-                                }
-
-                                //点击注册
-                                const register = () => {
-                                    if (cflag.value) {
-                                        if (checkPhone() && checkCode() && checkPassword() && checkRePassword()) {
-                                            axios({
-                                                url: "http://localhost:8080/user/register",
-                                                method: 'post',
-                                                params: {
-                                                    phone: form.phone,
-                                                    code: form.code,
-                                                    password: form.password,
-                                                    repassword: form.repassword,
-                                                }
-                                            }).then(res => {
-                                                alert(res.data.msg)
-                                                location.href = "/login.html"
-                                            }).catch(e => {
-                                                alert("注册失败"+e)
-                                            })
-                                        }
-                                    }else {
-                                        alert("请勾选同意服务条款再注册！")
-                                    }
-                                }
-                                return {
-                                    num,
-                                    form,
-                                    flag,
-                                    cflag,
-                                    getCode,
-                                    register,
-                                }
-                            }
-                        }).mount("#register")
-                    </script>
 
                 </div>
             </div>
 
         </div>
     </div>
+
+    <script>
+        $(function () {
+            $('#doc-my-tabs').tabs();
+        })
+
+        Vue.createApp({
+            setup() {
+                const checkEmail = () => {
+                    if (eform.email != null && eform.email != '') {
+                        return true
+                    }
+                    alert("请输入邮箱")
+                    return false
+                }
+                const checkECode = () => {
+                    if (eform.ecode != null && eform.ecode != '') {
+                        return true
+                    }
+                    alert("请输入验证码")
+                    return false
+                }
+                const checkEPassword = () => {
+                    if (eform.epassword != null && eform.epassword != '') {
+                        return true
+                    }
+                    alert("请输入密码")
+                    return false
+                }
+                const checkERePassword = () => {
+                    if (eform.erepassword != null && eform.erepassword != '' && eform.epassword === eform.erepassword) {
+                        return true
+                    }
+                    alert("确认密码与密码不一致，请重新输入")
+                    return false
+                }
+
+                const eform = Vue.reactive({
+                    email: '',
+                    ecode: '',
+                    epassword: '',
+                    erepassword: '',
+                })
+                const ceflag = Vue.ref(false)
+                const eflag = Vue.ref(false)
+                const emailNum = Vue.ref('获取')
+
+                //邮件点击获取验证码按钮
+                const getEmailCode = () => {
+                    if (checkEmail()) {
+                        axios({
+                            url: "http://localhost:8080/user/ecode/" + form.email,
+                            method: 'get',
+                        }).then(res => {
+                            alert(res.data.msg)
+                        }).catch(e => {
+                            alert(e)
+                        })
+                        //设置点击获取后60秒倒计时
+                        eflag.value = true
+                        emailNum.value = 60
+                        let clock = setInterval(() => {
+                            emailNum.value--
+                            if (emailNum.value <= 0) {
+                                clearInterval(clock)
+                                emailNum.value = '获取'
+                                eflag.value = false
+                            }
+                        }, 1000)
+                    }
+                }
+
+                //邮件点击注册
+                const emailRegister = () => {
+                    if (ceflag.value) {
+                        if (checkEmail() && checkECode() && checkEPassword() && checkERePassword()) {
+                            axios({
+                                url: "http://localhost:8080/user/register",
+                                method: 'post',
+                                params: {
+                                    email: eform.email,
+                                    code: eform.ecode,
+                                    password: eform.epassword,
+                                    repassword: eform.erepassword,
+                                }
+                            }).then(res => {
+                                alert(res.data.msg)
+                                location.href = "/login.html"
+                            }).catch(e => {
+                                alert("注册失败" + e)
+                            })
+                        }
+                    } else {
+                        alert("请勾选同意服务条款再注册！")
+                    }
+                }
+                return {
+                    emailNum,
+                    eform,
+                    eflag,
+                    ceflag,
+                    getEmailCode,
+                    emailRegister,
+                }
+            }
+        }).mount("#emailRegister")
+
+        Vue.createApp({
+            setup() {
+                const checkEmail = () => {
+                    if (eform.email != null && eform.email != '') {
+                        return true
+                    }
+                    alert("请输入邮箱")
+                    return false
+                }
+                const checkECode = () => {
+                    if (eform.ecode != null && eform.ecode != '') {
+                        return true
+                    }
+                    alert("请输入验证码")
+                    return false
+                }
+                const checkEPassword = () => {
+                    if (eform.epassword != null && eform.epassword != '') {
+                        return true
+                    }
+                    alert("请输入密码")
+                    return false
+                }
+                const checkERePassword = () => {
+                    if (eform.erepassword != null && eform.erepassword != '' && eform.epassword === eform.erepassword) {
+                        return true
+                    }
+                    alert("确认密码与密码不一致，请重新输入")
+                    return false
+                }
+
+                const checkPhone = () => {
+                    if (form.phone != null && form.phone != '') {
+                        return true
+                    }
+                    alert("请输入手机号")
+                    return false
+                }
+                const checkCode = () => {
+                    if (form.code != null && form.code != '') {
+                        return true
+                    }
+                    alert("请输入验证码")
+                    return false
+                }
+                const checkPassword = () => {
+                    if (form.password != null && form.password != '') {
+                        return true
+                    }
+                    alert("请输入密码")
+                    return false
+                }
+                const checkRePassword = () => {
+                    if (form.repassword != null && form.repassword != '' && form.password === form.repassword) {
+                        return true
+                    }
+                    alert("确认密码与密码不一致，请重新输入")
+                    return false
+                }
+
+                const form = Vue.reactive({
+                    phone: '',
+                    code: '',
+                    password: '',
+                    repassword: '',
+                })
+
+                const eform = Vue.reactive({
+                    email: '',
+                    ecode: '',
+                    epassword: '',
+                    erepassword: '',
+                })
+
+                const ceflag = Vue.ref(false)
+                const eflag = Vue.ref(false)
+                const emailNum = Vue.ref('获取')
+
+                const cflag = Vue.ref(false)
+                const flag = Vue.ref(false)
+                const num = Vue.ref('获取')
+
+                //邮件点击获取验证码按钮
+                const getEmailCode = () => {
+                    if (checkEmail()) {
+                        axios({
+                            url: `http://localhost:8080/user/ecode/${form.email}`,
+                            method: 'get',
+                        }).then(res => {
+                            alert(res.data.msg)
+                        }).catch(e => {
+                            alert(e)
+                        })
+                        //设置点击获取后60秒倒计时
+                        eflag.value = true
+                        emailNum.value = 60
+                        let clock = setInterval(() => {
+                            emailNum.value--
+                            if (emailNum.value <= 0) {
+                                clearInterval(clock)
+                                emailNum.value = '获取'
+                                eflag.value = false
+                            }
+                        }, 1000)
+                    }
+                }
+
+                //邮件点击注册
+                const emailRegister = () => {
+                    if (ceflag.value) {
+                        if (checkEmail() && checkECode() && checkEPassword() && checkERePassword()) {
+                            axios({
+                                url: "http://localhost:8080/user/register",
+                                method: 'post',
+                                params: {
+                                    email: eform.email,
+                                    code: eform.ecode,
+                                    password: eform.epassword,
+                                    repassword: eform.erepassword,
+                                }
+                            }).then(res => {
+                                alert(res.data.msg)
+                                location.href = "/login.html"
+                            }).catch(e => {
+                                alert("注册失败" + e)
+                            })
+                        }
+                    } else {
+                        alert("请勾选同意服务条款再注册！")
+                    }
+                }
+
+                //点击获取验证码按钮
+                const getCode = () => {
+                    if (checkPhone()) {
+                        axios({
+                            url: "http://localhost:8080/user/code/" + form.phone,
+                            method: 'get',
+                        }).then(res => {
+                            alert(res.data.msg)
+                        }).catch(e => {
+                            alert(e)
+                        })
+                        //设置点击获取后60秒倒计时
+                        flag.value = true
+                        num.value = 60
+                        let clock = setInterval(() => {
+                            num.value--
+                            if (num.value <= 0) {
+                                clearInterval(clock)
+                                num.value = '获取'
+                                flag.value = false
+                            }
+                        }, 1000)
+                    }
+                }
+
+                //点击注册
+                const register = () => {
+                    if (cflag.value) {
+                        if (checkPhone() && checkCode() && checkPassword() && checkRePassword()) {
+                            axios({
+                                url: "http://localhost:8080/user/register",
+                                method: 'post',
+                                params: {
+                                    phone: form.phone,
+                                    code: form.code,
+                                    password: form.password,
+                                    repassword: form.repassword,
+                                }
+                            }).then(res => {
+                                alert(res.data.msg)
+                                location.href = "/login.html"
+                            }).catch(e => {
+                                alert("注册失败" + e)
+                            })
+                        }
+                    } else {
+                        alert("请勾选同意服务条款再注册！")
+                    }
+                }
+
+
+                return {
+                    num,
+                    form,
+                    flag,
+                    cflag,
+                    getCode,
+                    register,
+                    emailNum,
+                    eform,
+                    eflag,
+                    ceflag,
+                    getEmailCode,
+                    emailRegister,
+                }
+            }
+        }).mount("#register")
+    </script>
 
     <div class="footer ">
         <div class="footer-hd ">

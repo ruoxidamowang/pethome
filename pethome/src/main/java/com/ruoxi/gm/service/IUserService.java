@@ -13,7 +13,7 @@ public interface IUserService {
      * @param phone 根据手机号查询是否已经注册过，注册过则不返回验证码，未注册则返回四位随机数字验证码
      * @return 返回生成的验证码
      */
-    Result getCode(String phone);
+    Result getPhoneCode(String phone);
 
     /**
      * 注册
@@ -28,4 +28,10 @@ public interface IUserService {
      * @return 登陆结果
      */
     Result login(UserQuery query);
+
+    /**
+     * @param email 根据邮箱，注册过则不返回验证码，未注册则返回四位随机数字验证码
+     * @return 返回生成的验证码
+     */
+    Result getEmailCode(String email);
 }

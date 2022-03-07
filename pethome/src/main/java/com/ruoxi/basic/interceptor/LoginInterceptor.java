@@ -26,7 +26,9 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         } else {
             response.setContentType("application/json;charset=utf-8");
-            response.getWriter().write("请登录！");
+            //{"success":"false","code":5001}
+//            response.getWriter().write("{\"msg\":\"请登录后再访问\",\"code\":5001}");
+            response.getWriter().write("请登录后再访问!");
             return false;
         }
     }

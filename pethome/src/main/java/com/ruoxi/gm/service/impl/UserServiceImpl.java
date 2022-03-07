@@ -3,10 +3,7 @@ package com.ruoxi.gm.service.impl;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import com.ruoxi.basic.common.Constant;
-import com.ruoxi.basic.common.MD5Utils;
-import com.ruoxi.basic.common.Result;
-import com.ruoxi.basic.common.SMSUtils;
+import com.ruoxi.basic.common.*;
 import com.ruoxi.gm.domain.LoginInfo;
 import com.ruoxi.gm.mapper.LoginInfoMapper;
 import com.ruoxi.gm.mapper.UserMapper;
@@ -36,12 +33,15 @@ public class UserServiceImpl implements IUserService {
     @Resource
     private RedisTemplate redisTemplate;
 
+    @Resource
+    private EmailUtils emailUtils;
+
     /**
      * @param phone 根据手机号查询是否已经注册过，注册过则不返回验证码，未注册则返回四位随机数字验证码
      * @return 返回信息和生成的验证码
      */
     @Override
-    public Result getCode(String phone) {
+    public Result getPhoneCode(String phone) {
         //查询手机号是否已经注册过
         LoginInfo userByPhone = loginInfoMapper.selectUserByPhone(phone);
         if (userByPhone != null) {
@@ -142,5 +142,50 @@ public class UserServiceImpl implements IUserService {
         }
 
 
+    }
+
+    /**
+     * @param email 根据邮箱，注册过则不返回验证码，未注册则返回四位随机数字验证码
+     * @return 返回生成的验证码
+     */
+    @Override
+    public Result getEmailCode(String email) {
+        //查询邮箱是否已经注册过
+        LoginInfo userByEmail = loginInfoMapper.selectUserByEmail(email);
+        if (userByEmail != null) {
+            //注册过则返回提示信息：您已注册，快去登录吧！
+            return Result.me(false).setMsg("您已注册，快去登录吧！");
+        } else {
+            //未注册则查看之前是否已经生成过验证码
+            String redisCode = (String) redisTemplate.opsForValue().get(email);
+            if (redisCode != null) {
+                //如果生成过验证码则查看上次生成的验证码是否过期
+                Long time = redisTemplate.getExpire(email);
+                //上次验证码未过期
+                if (time > 0) {
+                    //从redis中取出并再次发送邮件
+                    emailUtils.sendEmail(email, redisCode);
+                } else {
+                    //上次验证码已过期，重新生成验证码
+                    String code = RandomUtil.randomNumbers(4);
+                    //存入redis
+                    redisTemplate.opsForValue().set(email, code);
+                    //设置3分钟过期时间
+                    redisTemplate.expire(email, 3, TimeUnit.MINUTES);
+                    //发送邮件
+                    emailUtils.sendEmail(email, code);
+                }
+            } else {
+                //未生成过则生成验证码
+                String code = RandomUtil.randomNumbers(4);
+                //存入redis
+                redisTemplate.opsForValue().set(email, code);
+                //重新生成验证码存入redis并设置3分钟过期时间
+                redisTemplate.expire(email, 3, TimeUnit.MINUTES);
+                //发送邮件
+                emailUtils.sendEmail(email, code);
+            }
+            return Result.me().setMsg("验证码已发送至您的邮箱，请注意查收！");
+        }
     }
 }

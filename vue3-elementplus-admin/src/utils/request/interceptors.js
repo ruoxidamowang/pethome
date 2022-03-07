@@ -21,7 +21,12 @@ export const responseInterceptors = responseHook => response => {
 			// 正确响应
 			res.data === null && console.log(response)
 			return Promise.resolve(res)
-		} else if (res.code == 5001 || res.code === 50008 || res.code === 50012 || res.code === 50014) {
+		}/*else if (res.code === 6666) {
+			// 未登录
+			$error(res.msg || '请先登录')
+			router.replace({path:"/login"})
+			return Promise.reject(res)
+		}*/ else if (res.code == 5001 || res.code === 50008 || res.code === 50012 || res.code === 50014) {
 			// 过期
 			return responseHook && responseHook(response)
 		}
