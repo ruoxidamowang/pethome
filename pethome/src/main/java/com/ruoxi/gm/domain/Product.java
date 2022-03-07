@@ -26,6 +26,26 @@ public class Product implements Serializable {
     private ProductDetail productDetail;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    public Date getOffsaletime() {
+        return offsaletime;
+    }
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public void setOffsaletime(Date offsaletime) {
+        this.offsaletime = offsaletime;
+    }
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    public Date getOnsaletime() {
+        return onsaletime;
+    }
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    public void setOnsaletime(Date onsaletime) {
+        this.onsaletime = onsaletime;
+    }
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     public Date getCreatetime() {
         return createtime;
     }
