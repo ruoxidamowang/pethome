@@ -11,9 +11,9 @@ import java.util.List;
  * @create 2022-02-21 13:59
  */
 public interface ProductMapper {
-    void save(Product s);
+    void save(Product p);
     void remove(Long id);
-    void update(Product s);
+    void update(Product p);
 
     List<Product> loadAll(ProductQuery query);
 

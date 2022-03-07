@@ -17,7 +17,7 @@ setupRouter(app) // 注册路由
 
 setupStore(app) // 注册状态管理
 
-// createPermissionGuard(router)
+createPermissionGuard(router)
 
 setupGlobCom(app) // 注册全局组件
 

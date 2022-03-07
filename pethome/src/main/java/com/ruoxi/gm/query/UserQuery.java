@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author 若兮
@@ -28,6 +30,7 @@ public class UserQuery {
     private String headImg;
     private Integer code;
     private Integer logininfo_id;
+    private ArrayList<Map<String, String>> menuList;
 
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     public Date getCreatetime() {

@@ -93,7 +93,7 @@ export const dynamicRoutes = [
       },
       {
         path: 'emp',
-        component: () => import('@/views/icons/index'),
+        component: () => import('@/views/table/inline-edit-table'),
         name: 'Emp',
         meta: { title: '员工管理', noCache: true ,icon: 'el-icon-s-custom'},
       },
@@ -113,19 +113,19 @@ export const dynamicRoutes = [
         path: 'shop',
         component: () => import('@/views/shop/index'),
         name: 'Shop',
-        meta: { title: '店铺管理', noCache: true ,icon: 'el-icon-s-grid'},
+        meta: { title: '店铺管理', noCache: true ,icon: 'el-icon-s-shop'},
       },
       {
         path: 'product',
         component: () => import('@/views/product/index'),
         name: 'Product',
-        meta: { title: '产品管理', noCache: true ,icon: 'el-icon-s-grid'},
+        meta: { title: '产品管理', noCache: true ,icon: 'el-icon-shopping-cart-full'},
       },
       {
         path: 'add',
         component: () => import('@/views/shop/add'),
         name: 'Add',
-        meta: { title: '店铺申请', noCache: true ,icon: 'el-icon-s-grid'},
+        meta: { title: '店铺申请', noCache: true ,icon: 'el-icon-circle-plus'},
       },
       {
         path: 'menu',
@@ -135,7 +135,7 @@ export const dynamicRoutes = [
       },
       {
         path: 'icon',
-        component: () => import('@/views/table/inline-edit-table'),
+        component: () => import('@/views/icons/index'),
         name: 'Icon',
         meta: { title: '图标', noCache: true ,icon: 'el-icon-star-on'},
       },

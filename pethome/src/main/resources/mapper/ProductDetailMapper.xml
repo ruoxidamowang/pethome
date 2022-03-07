@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoxi.gm.mapper.ProductDetailMapper">
+
+    <!--void save(ProductDetail pd);-->
+    <insert id="save">
+        insert into t_product_detail (product_id,intro, orderNotice)
+        values (#{product_id},#{intro}, #{orderNotice})
+    </insert>
+
+    <!--void remove(Long id);-->
+    <delete id="remove">
+        delete
+        from t_product_detail
+        where product_id = #{product_id}
+    </delete>
+
+    <!--void update(ProductDetail pd);-->
+    <update id="update">
+        update t_product_detail
+        set intro = #{intro},
+            orderNotice = #{orderNotice}
+        where product_id = #{id}
+    </update>
+
+    <!--void dels(ArrayList<Long> ids);-->
+    <delete id="dels">
+        delete
+        from t_product_detail
+        where product_id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!--List<ProductDetail> selectAll();-->
+    <select id="selectAll" resultType="com.ruoxi.gm.domain.ProductDetail">
+        select *
+        from t_product_detail
+    </select>
+</mapper>

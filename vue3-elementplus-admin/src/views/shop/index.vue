@@ -318,7 +318,7 @@ export default {
         'admin': {"id": form.admin.id}
       }).then(res => {
         if (res.success) {
-          ElMessage.success("修改成功")
+          ElMessage.success(res.msg)
           load(currentPage4.value, pageSize4.value)
         } else {
           ElMessage.error("修改失败" + res.msg)
@@ -334,7 +334,7 @@ export default {
         ElMessage.success(res.msg)
         load(currentPage4.value, pageSize4.value)
       }).catch(e => {
-        ElMessage.success("删除失败" + e)
+        ElMessage.error("删除失败" + e)
       })
     }
 

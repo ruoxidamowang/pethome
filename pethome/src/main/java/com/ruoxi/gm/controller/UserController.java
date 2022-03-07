@@ -26,7 +26,7 @@ public class UserController {
      */
     @GetMapping("code/{phone}")
     @ApiOperation("根据手机号查询是否已经注册过，注册过则不返回验证码，未注册则返回四位随机数字验证码")
-    public Result getPhoneCode(@PathVariable String phone){
+    public Result getPhoneCode(@PathVariable String phone) {
         return service.getPhoneCode(phone);
     }
 
@@ -36,19 +36,19 @@ public class UserController {
      */
     @GetMapping("ecode/{email}")
     @ApiOperation("根据邮箱查询是否已经注册过，注册过则不返回验证码，未注册则返回四位随机数字验证码")
-    public Result getEmailCode(@PathVariable String email){
+    public Result getEmailCode(@PathVariable String email) {
         return service.getEmailCode(email);
     }
 
     @PostMapping("register")
     @ApiOperation("用户注册接口")
-    public Result register(@RequestBody UserQuery query){
+    public Result register(@RequestBody UserQuery query) {
         return service.register(query);
     }
 
     @PostMapping("login")
     @ApiOperation("用户登录接口")
-    public Result login(@RequestBody UserQuery query){
+    public Result login(@RequestBody UserQuery query) {
         return service.login(query);
     }
 }

@@ -2,6 +2,7 @@ package com.ruoxi.gm.controller;
 
 import com.github.tobato.fastdfs.service.FastFileStorageClient;
 import com.ruoxi.basic.common.Result;
+import com.ruoxi.gm.domain.Product;
 import com.ruoxi.gm.query.ProductQuery;
 import com.ruoxi.gm.service.IProductService;
 import io.swagger.annotations.Api;
@@ -9,6 +10,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 
 /**
  * @author 若兮
@@ -24,48 +26,48 @@ public class ProductController {
     @Resource
     private FastFileStorageClient fastFileStorageClient;
 
-//    @ApiOperation(value = "产品添加或修改",notes = "有id则为修改，没有id则为添加")
-//    @PutMapping
-//    private Result addOrUpdate(@RequestBody Shop shop) {
-//        if (shop.getId() != null) {
-//            try {
-//                service.update(shop);
-//                return Result.me();
-//            } catch (Exception e) {
-//                return Result.me(false).setMsg("更新失败-" + e.getCause());
-//            }
-//        } else {
-//            try {
-//                service.add(shop);
-//                return Result.me();
-//            } catch (Exception e) {
-//                return Result.me(false).setMsg("添加失败-" + e.getCause());
-//            }
-//        }
-//    }
+    @ApiOperation(value = "产品添加或修改",notes = "有id则为修改，没有id则为添加")
+    @PutMapping
+    private Result addOrUpdate(@RequestBody Product product) {
+        if (product.getId() != null) {
+            try {
+                service.update(product);
+                return Result.me("更新成功");
+            } catch (Exception e) {
+                return Result.me(false).setMsg("更新失败-" + e.getCause());
+            }
+        } else {
+            try {
+                service.add(product);
+                return Result.me("添加成功");
+            } catch (Exception e) {
+                return Result.me(false).setMsg("添加失败-" + e.getCause());
+            }
+        }
+    }
 
-//    @ApiOperation("根据id删除产品")
-//    @DeleteMapping("delShop")
-//    private Result delete(@RequestParam Long id,@RequestParam String path) {
-//        try {
-//            service.del(id);
+    @ApiOperation("根据id删除产品")
+    @DeleteMapping("delProduct")
+    private Result delete(@RequestParam Long id/*,@RequestParam String path*/) {
+        try {
+            service.del(id);
 //            fastFileStorageClient.deleteFile("http://34.80.47.178/"+path);
-//            return Result.me().setMsg("删除成功！");
-//        } catch (Exception e) {
-//            return Result.me(false).setMsg("删除失败-" + e.getCause());
-//        }
-//    }
+            return Result.me().setMsg("删除成功！");
+        } catch (Exception e) {
+            return Result.me(false).setMsg("删除失败-" + e.getCause());
+        }
+    }
 
-//    @ApiOperation("根据id批量删除产品")
-//    @DeleteMapping
-//    private Result deletes(@RequestBody ArrayList<Long> ids) {
-//        try {
-//            service.removeAll(ids);
-//            return Result.me();
-//        } catch (Exception e) {
-//            return Result.me(false).setMsg("删除失败-" + e.getCause());
-//        }
-//    }
+    @ApiOperation("根据id批量删除产品")
+    @DeleteMapping
+    private Result deletes(@RequestBody ArrayList<Long> ids) {
+        try {
+            service.removeAll(ids);
+            return Result.me();
+        } catch (Exception e) {
+            return Result.me(false).setMsg("删除失败-" + e.getCause());
+        }
+    }
 
     @ApiOperation("分页查询产品")
     @PostMapping

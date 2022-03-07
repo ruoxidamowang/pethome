@@ -24,13 +24,13 @@ export function addOrEdit(data) {
 	})
 }
 
-export function delShop(id,path) {
+export function delProduct(id/*,path*/) {
 	return request({
 		url: '/product/delProduct',
 		method: 'delete',
 		params: {
 			id:id,
-			path:path
+			// path:path
 		}
 	})
 }

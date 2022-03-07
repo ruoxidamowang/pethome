@@ -8,14 +8,10 @@
       <el-input v-model="formInline.name" placeholder="产品名称" clearable></el-input>
     </el-form-item>
     <el-form-item>
-      <el-input v-model="formInline.username" placeholder="产品经理" clearable></el-input>
-    </el-form-item>
-    <el-form-item>
       <el-select v-model="formInline.state">
         <el-option label="请选择状态" value=""></el-option>
-        <el-option label="禁用" value="0"></el-option>
-        <el-option label="启用" value="1"></el-option>
-        <el-option label="待审核" value="2"></el-option>
+        <el-option label="下架" value="0"></el-option>
+        <el-option label="上架" value="1"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item>
@@ -37,9 +33,8 @@
     <el-table-column prop="salecount" label="产品销量" sortable/>
     <el-table-column prop="state" label="产品状态" sortable>
       <template #default="scope">
-        <label v-if="scope.row.state===1" style="color: green">启用</label>
-        <label v-else-if="scope.row.state===0" style="color: red">禁用</label>
-        <label v-else style="color: orange">待审核</label>
+        <label v-if="scope.row.state===1" style="color: green">上架</label>
+        <label v-else style="color: red">下架</label>
       </template>
     </el-table-column>
     <el-table-column prop="onsaletime" label="上架时间" sortable/>
@@ -85,8 +80,20 @@
       <el-form-item label="产品名称" :label-width="formLabelWidth">
         <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="产品电话" :label-width="formLabelWidth">
-        <el-input v-model="form.tel" autocomplete="off"></el-input>
+      <el-form-item label="产品资源" :label-width="formLabelWidth">
+        <el-input v-model="form.resources" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="产品售价" :label-width="formLabelWidth">
+        <el-input v-model="form.saleprice" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="产品销量" :label-width="formLabelWidth">
+        <el-input v-model="form.salecount" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="下架时间" :label-width="formLabelWidth">
+        <el-input v-model="form.offsaletime" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="上架时间" :label-width="formLabelWidth">
+        <el-input v-model="form.onsaletime" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="产品状态" :label-width="formLabelWidth">
         <el-select v-model="form.state" class="m-2" placeholder="产品状态">
@@ -99,11 +106,14 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="产品地址" :label-width="formLabelWidth">
-        <el-input v-model="form.address" autocomplete="off"></el-input>
+      <el-form-item label="成本价" :label-width="formLabelWidth">
+        <el-input v-model="form.costprice" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="管理人员" :label-width="formLabelWidth">
-        <el-input v-model="form.admin.username" autocomplete="off"></el-input>
+      <el-form-item label="简介" :label-width="formLabelWidth">
+        <el-input v-model="form.productDetail.intro" autocomplete="off"></el-input>
+      </el-form-item>
+      <el-form-item label="预约须知" :label-width="formLabelWidth">
+        <el-input v-model="form.productDetail.orderNotice" autocomplete="off"></el-input>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -118,7 +128,7 @@
 <script>
 import {onMounted, reactive, ref} from "vue";
 import {ElMessage, ElMessageBox} from "element-plus";
-import {addOrEdit, loadAll, delShop, removeAll} from "@/api/product";
+import {addOrEdit, loadAll, delProduct, removeAll} from "@/api/product";
 
 export default {
   setup() {
@@ -146,14 +156,14 @@ export default {
     const form = reactive({
       id: '',
       name: '',
-      resources:'',
-      saleprice:'',
-      offsaletime:'',
-      onsaletime:'',
-      state:'',
-      costprice:'',
-      createtime:'',
-      salecount:'',
+      resources: '',
+      saleprice: '',
+      offsaletime: '',
+      onsaletime: '',
+      state: '',
+      costprice: '',
+      createtime: '',
+      salecount: '',
       productDetail: reactive({
         id: '',
         intro: '',
@@ -221,12 +231,15 @@ export default {
       //清空表单数据
       form.id = ''
       form.name = ''
-      form.tel = ''
+      form.resources = ''
+      form.saleprice = ''
+      form.offsaletime = ''
+      form.onsaletime = ''
       form.state = ''
-      form.address = ''
-      form.logo = ''
-      form.admin.id = ''
-      form.admin.username = ''
+      form.costprice = ''
+      form.salecount = ''
+      form.productDetail.intro = ''
+      form.productDetail.orderNotice = ''
     }
 
     //高级查询
@@ -234,7 +247,6 @@ export default {
       'start': currentPage4.value,
       'pageSize': pageSize4.value,
       'name': formInline.name,
-      'admin': {'username': formInline.username},
       'state': formInline.state
     }).then(res => {
       total.value = res.data.total
@@ -283,13 +295,15 @@ export default {
       //将数据回写到模态框表单中
       form.id = row.id
       form.name = row.name
-      form.tel = row.tel
-      form.registerTime = row.registerTime
+      form.resources = row.resources
+      form.saleprice = row.saleprice
+      form.offsaletime = row.offsaletime
+      form.onsaletime = row.onsaletime
       form.state = row.state
-      form.address = row.address
-      form.logo = row.logo
-      form.admin.id = row.admin.id
-      form.admin.username = row.admin.username
+      form.costprice = row.costprice
+      form.salecount = row.salecount
+      form.productDetail.intro = row.productDetail.intro
+      form.productDetail.orderNotice = row.productDetail.orderNotice
     }
 
     //添加和修改提交
@@ -301,36 +315,43 @@ export default {
       addOrEdit({
         'id': form.id,
         'name': form.name,
-        'tel': form.tel,
+        'resources': form.resources,
         'state': form.state,
-        'address': form.address,
-        'logo': form.logo,
-        'admin': {"id": form.admin.id}
+        'saleprice': form.saleprice,
+        'offsaletime': form.offsaletime,
+        'onsaletime': form.onsaletime,
+        'costprice': form.costprice,
+        'salecount': form.salecount,
+        'productDetail': {
+          "id": form.id,
+          "intro": form.productDetail.intro,
+          "orderNotice": form.productDetail.orderNotice
+        }
       }).then(res => {
         if (res.success) {
-          ElMessage.success("修改成功")
+          ElMessage.success(res.msg)
           load(currentPage4.value, pageSize4.value)
         } else {
-          ElMessage.error("修改失败" + res.msg)
+          ElMessage.error(res.msg)
         }
       }).catch(e => {
-        ElMessage.error("修改失败" + e)
+        ElMessage.error("修改失败-" + e)
       })
     }
 
     //删除事件
     const handleDelete = (index, row) => {
-      delShop(row.id,row.logo).then(res => {
+      delProduct(row.id/*,row.logo*/).then(res => {
         ElMessage.success(res.msg)
         load(currentPage4.value, pageSize4.value)
       }).catch(e => {
-        ElMessage.success("删除失败" + e)
+        ElMessage.error("删除失败-" + e.msg)
       })
     }
 
     //审核事件
     const handlePass = (index, row) => {
-      //修改状态为启用
+      //修改状态为通过
       addOrEdit({
         'id': row.id,
         'name': row.name,
@@ -352,9 +373,8 @@ export default {
     }
 
     const states = ref([
-      {id: 0, value: '禁用'},
-      {id: 1, value: '启用'},
-      {id: 2, value: '待审核'},
+      {id: 0, value: '下架'},
+      {id: 1, value: '上架'},
     ])
 
     return {

@@ -21,17 +21,11 @@ public class User implements Serializable {
     private String password;
     private Integer state;
     private Integer age;
+
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createtime = new Date();
+
     private String headImg;
     private LoginInfo logininfo;
-
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    public Date getCreatetime() {
-        return createtime;
-    }
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
-    }
 }

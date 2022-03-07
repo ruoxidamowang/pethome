@@ -15,6 +15,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -136,6 +139,16 @@ public class UserServiceImpl implements IUserService {
             redisTemplate.expire(uuid, 30, TimeUnit.MINUTES);
             info.setToken(uuid);
             System.out.println(info);
+            ArrayList<Map<String, String>> list = new ArrayList<>();
+            HashMap<String, String> map = new HashMap<>();
+            map.put("path", "/dashboard");
+            map.put("name", "Dashboard");
+            list.add(map);
+            map = new HashMap<>();
+            map.put("path", "/admin");
+            map.put("name", "Admin");
+            list.add(map);
+            info.setMenuList(list);
             return Result.me(info);
         } else {
             return Result.me(false).setMsg("用户名或密码错误");

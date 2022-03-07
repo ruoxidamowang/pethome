@@ -17,41 +17,22 @@ public class Product implements Serializable {
     private String name;
     private String resources;
     private Double saleprice;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date offsaletime;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date onsaletime;
+
     private Integer state;
     private String costprice;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createtime = new Date();
+
     private Long salecount;
     private ProductDetail productDetail;
-
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    public Date getOffsaletime() {
-        return offsaletime;
-    }
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public void setOffsaletime(Date offsaletime) {
-        this.offsaletime = offsaletime;
-    }
-
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    public Date getOnsaletime() {
-        return onsaletime;
-    }
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public void setOnsaletime(Date onsaletime) {
-        this.onsaletime = onsaletime;
-    }
-
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
-    public Date getCreatetime() {
-        return createtime;
-    }
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    public void setCreatetime(Date createtime) {
-        this.createtime = createtime;
-    }
 }

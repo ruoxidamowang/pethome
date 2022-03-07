@@ -9,4 +9,6 @@ import lombok.Data;
  */
 @Data
 public class ProductQuery extends BaseQuery {
+    private String name;
+    private Integer state;
 }

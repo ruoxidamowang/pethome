@@ -21,56 +21,80 @@
         </association>
     </resultMap>
 
-
-    <insert id="save">
+    <!--void save(Product p);-->
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
         insert into t_product (name, resources, saleprice, offsaletime, onsaletime, state, costprice, createtime,
                                salecount)
         values (#{name}, #{resources}, #{saleprice}, #{offsaletime}, #{onsaletime}, #{state}, #{costprice},
                 #{createtime},
-                #{salecount});
+                #{salecount})
     </insert>
 
-
+    <!--void remove(Long id);-->
     <delete id="remove">
         delete
         from t_product
         where id = #{id}
     </delete>
 
-
+    <!--void update(Product p);-->
     <update id="update">
-
+        update t_product
+        set name        = #{name},
+            resources   = #{resources},
+            saleprice   = #{saleprice},
+            offsaletime = #{offsaletime},
+            onsaletime  = #{onsaletime},
+            state       = #{state},
+            costprice   = #{costprice},
+            salecount   = #{salecount}
+        where id = #{id}
     </update>
 
     <!--List<Product> loadAll(ProductQuery query);-->
     <select id="loadAll" resultMap="product_map">
-        SELECT tp.id,
-               tp.name,
-               tp.resources,
-               tp.saleprice,
-               tp.offsaletime,
-               tp.onsaletime,
-               tp.state,
-               tp.costprice,
-               tp.createtime,
-               tp.salecount,
-               tpd.id pdid,
-               tpd.product_id,
-               tpd.intro,
-               tpd.orderNotice
-        FROM `t_product` tp,
-             `t_product_detail` tpd
-        WHERE tp.id = tpd.product_id
+        SELECT
+            tp.id,
+            tp.NAME,
+            tp.resources,
+            tp.saleprice,
+            tp.offsaletime,
+            tp.onsaletime,
+            tp.state,
+            tp.costprice,
+            tp.createtime,
+            tp.salecount,
+            tpd.id pdid,
+            tpd.product_id,
+            tpd.intro,
+            tpd.orderNotice
+        FROM
+            `t_product` tp
+            JOIN `t_product_detail` tpd ON tp.id = tpd.product_id
+        <where>
+            <if test="name != null and name.trim() != ''">
+                and tp.name like concat('%',#{name},'%')
+            </if>
+            <if test="state != null">
+                and tp.state = #{state}
+            </if>
+        </where>
         order by state desc
     </select>
 
-
+    <!--void dels(ArrayList<Long> ids);-->
     <delete id="dels">
-
+        delete
+        from t_product
+        where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </delete>
 
-
+    <!--List<Product> selectAll();-->
     <select id="selectAll" resultType="com.ruoxi.gm.domain.Product">
-
+        select *
+        from t_product
     </select>
 </mapper>
