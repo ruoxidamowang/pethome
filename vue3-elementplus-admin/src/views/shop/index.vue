@@ -334,7 +334,7 @@ export default {
         ElMessage.success(res.msg)
         load(currentPage4.value, pageSize4.value)
       }).catch(e => {
-        ElMessage.error("删除失败" + e)
+        ElMessage.error("删除失败-" + e)
       })
     }
 

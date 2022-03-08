@@ -9,10 +9,12 @@ import App from './App.vue'
 import { createPermissionGuard } from './permission' // 权限控制
 
 import 'normalize.css/normalize.css'
-import '@/styles/index.scss' // 全局样式 css
-
-const app = createApp(App)
-
+import '@/styles/index.scss'
+import VueMarkdownEditor from "@kangc/v-md-editor"; // 全局样式 css
+import vuepressTheme from '@kangc/v-md-editor/lib/theme/vuepress.js';
+import '@kangc/v-md-editor/lib/style/base-editor.css';
+VueMarkdownEditor.use(vuepressTheme);
+const app = createApp(App).use(VueMarkdownEditor);
 setupRouter(app) // 注册路由
 
 setupStore(app) // 注册状态管理

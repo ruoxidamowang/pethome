@@ -74,7 +74,7 @@
   </div>
 
   <!--添加和修改模态框-->
-  <el-dialog v-model="dialogFormVisible" :title="title">
+  <el-dialog v-model="dialogFormVisible" width="1000px" :title="title">
     <el-form :model="form">
       <el-input type="hidden" v-model="form.id"></el-input>
       <el-form-item label="产品名称" :label-width="formLabelWidth">
@@ -90,10 +90,10 @@
         <el-input v-model="form.salecount" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="下架时间" :label-width="formLabelWidth">
-        <el-input v-model="form.offsaletime" autocomplete="off"></el-input>
+        <el-input v-model="form.offsaletime" autocomplete="off" disabled></el-input>
       </el-form-item>
       <el-form-item label="上架时间" :label-width="formLabelWidth">
-        <el-input v-model="form.onsaletime" autocomplete="off"></el-input>
+        <el-input v-model="form.onsaletime" autocomplete="off" disabled></el-input>
       </el-form-item>
       <el-form-item label="产品状态" :label-width="formLabelWidth">
         <el-select v-model="form.state" class="m-2" placeholder="产品状态">
@@ -110,10 +110,13 @@
         <el-input v-model="form.costprice" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="简介" :label-width="formLabelWidth">
-        <el-input v-model="form.productDetail.intro" autocomplete="off"></el-input>
+        <v-md-editor :disabled-menus="[]"
+                     @upload-image="handleUploadImage"
+                     v-model="form.productDetail.intro"
+                     autocomplete="off"></v-md-editor>
       </el-form-item>
       <el-form-item label="预约须知" :label-width="formLabelWidth">
-        <el-input v-model="form.productDetail.orderNotice" autocomplete="off"></el-input>
+        <v-md-editor v-model="form.productDetail.orderNotice" autocomplete="off"></v-md-editor>
       </el-form-item>
     </el-form>
     <template #footer>
@@ -329,6 +332,7 @@ export default {
         }
       }).then(res => {
         if (res.success) {
+          console.log(res)
           ElMessage.success(res.msg)
           load(currentPage4.value, pageSize4.value)
         } else {
@@ -377,7 +381,22 @@ export default {
       {id: 1, value: '上架'},
     ])
 
+    const handleUploadImage = (event, insertImage, files)=>{
+      // 拿到 files 之后上传到文件服务器，然后向编辑框中插入对应的内容
+      console.log(files);
+
+      // 此处只做示例
+      insertImage({
+        url:
+            'https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1269952892,3525182336&fm=26&gp=0.jpg',
+        desc: '七龙珠',
+        // width: 'auto',
+        // height: 'auto',
+      });
+    }
+
     return {
+      handleUploadImage,
       states,
       handlePass,
       removeSelection,

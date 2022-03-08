@@ -35,14 +35,14 @@ public class ShopController {
         if (shop.getId() != null) {
             try {
                 service.update(shop);
-                return Result.me();
+                return Result.me().setMsg("修改成功");
             } catch (Exception e) {
-                return Result.me(false).setMsg("更新失败-" + e.getCause());
+                return Result.me(false).setMsg("修改失败-" + e.getCause());
             }
         } else {
             try {
                 service.add(shop);
-                return Result.me();
+                return Result.me().setMsg("添加成功");
             } catch (Exception e) {
                 return Result.me(false).setMsg("添加失败-" + e.getCause());
             }
@@ -66,9 +66,9 @@ public class ShopController {
     private Result deletes(@RequestBody ArrayList<Long> ids) {
         try {
             service.removeAll(ids);
-            return Result.me();
+            return Result.me().setMsg("批量删除成功");
         } catch (Exception e) {
-            return Result.me(false).setMsg("删除失败-" + e.getCause());
+            return Result.me(false).setMsg("批量删除失败-" + e.getCause());
         }
     }
 
