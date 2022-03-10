@@ -22,7 +22,7 @@
     </resultMap>
 
     <!--void save(Product p);-->
-    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+    <insert id="save" useGeneratedKeys="true" keyProperty="productDetail.product_id" keyColumn="id">
         insert into t_product (name, resources, saleprice, offsaletime, onsaletime, state, costprice, createtime,
                                salecount)
         values (#{name}, #{resources}, #{saleprice}, #{offsaletime}, #{onsaletime}, #{state}, #{costprice},

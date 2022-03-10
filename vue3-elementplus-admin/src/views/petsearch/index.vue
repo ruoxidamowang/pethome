@@ -5,13 +5,13 @@
       <el-button type="danger" @click="removeSelection">批量删除</el-button>
     </el-form-item>
     <el-form-item>
-      <el-input v-model="formInline.name" placeholder="产品名称" clearable></el-input>
+      <el-input v-model="formInline.name" placeholder="宠物名称" clearable></el-input>
     </el-form-item>
     <el-form-item>
-      <el-select v-model="formInline.state">
+      <el-select v-model="formInline.state" clearable>
         <el-option label="请选择状态" value=""></el-option>
-        <el-option label="下架" value="0"></el-option>
-        <el-option label="上架" value="1"></el-option>
+        <el-option label="待领养" value="0"></el-option>
+        <el-option label="已领养" value="1"></el-option>
       </el-select>
     </el-form-item>
     <el-form-item>
@@ -26,20 +26,30 @@
   <el-table ref="multipleTableRef" table-layout="fixed" :data="tableData" @selection-change="handleSelectionChange"
             style="width: 100%">
     <el-table-column type="selection"/>
-    <el-table-column prop="id" label="产品编号" sortable/>
-    <el-table-column prop="name" label="产品名称"/>
-    <el-table-column prop="costprice" label="产品成本" sortable/>
-    <el-table-column prop="saleprice" label="产品售价" sortable/>
-    <el-table-column prop="salecount" label="产品销量" sortable/>
-    <el-table-column prop="state" label="产品状态" sortable>
+    <el-table-column prop="id" label="宠物编号" sortable/>
+    <el-table-column prop="name" label="宠物名称"/>
+    <el-table-column prop="age" label="宠物年龄" sortable/>
+    <el-table-column prop="gender" label="宠物性别">
       <template #default="scope">
-        <label v-if="scope.row.state===1" style="color: green">上架</label>
-        <label v-else style="color: red">下架</label>
+        <label v-if="scope.row.gender===1" style="color: blue">公</label>
+        <label v-else style="color: pink">母</label>
       </template>
     </el-table-column>
-    <el-table-column prop="onsaletime" label="上架时间" sortable/>
-    <el-table-column prop="offsaletime" label="下架时间" sortable/>
-    <el-table-column label="操作" width="210px">
+    <el-table-column prop="coatColor" label="宠物颜色"/>
+<!--    <el-table-column prop="resources" label="宠物照片"/>-->
+    <el-table-column prop="petType.name" label="宠物类型"/>
+    <el-table-column prop="price" label="宠物价格" sortable/>
+    <el-table-column prop="address" label="宠物地址"/>
+    <el-table-column prop="state" label="宠物状态" sortable>
+      <template #default="scope">
+        <label v-if="scope.row.state===0" style="color: green">待领养</label>
+        <label v-else style="color: red">已领养</label>
+      </template>
+    </el-table-column>
+    <el-table-column prop="title" label="标题"/>
+    <el-table-column prop="user.username" label="发布者姓名"/>
+    <el-table-column prop="shop.name" label="店铺名字"/>
+    <el-table-column fixed="right" label="操作" width="210px">
       <template #default="scope">
         <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
         <el-popconfirm title="确定要删除吗?"
@@ -77,16 +87,16 @@
   <el-dialog v-model="dialogFormVisible" width="1000px" :title="title">
     <el-form :model="form">
       <el-input type="hidden" v-model="form.id"></el-input>
-      <el-form-item label="产品名称" :label-width="formLabelWidth">
+      <el-form-item label="宠物名称" :label-width="formLabelWidth">
         <el-input v-model="form.name" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="产品资源" :label-width="formLabelWidth">
+      <el-form-item label="宠物资源" :label-width="formLabelWidth">
         <el-input v-model="form.resources" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="产品售价" :label-width="formLabelWidth">
+      <el-form-item label="宠物售价" :label-width="formLabelWidth">
         <el-input v-model="form.saleprice" autocomplete="off"></el-input>
       </el-form-item>
-      <el-form-item label="产品销量" :label-width="formLabelWidth">
+      <el-form-item label="宠物销量" :label-width="formLabelWidth">
         <el-input v-model="form.salecount" autocomplete="off"></el-input>
       </el-form-item>
       <el-form-item label="下架时间" :label-width="formLabelWidth">
@@ -95,8 +105,8 @@
       <el-form-item label="上架时间" :label-width="formLabelWidth">
         <el-input v-model="form.onsaletime" autocomplete="off" disabled></el-input>
       </el-form-item>
-      <el-form-item label="产品状态" :label-width="formLabelWidth">
-        <el-select v-model="form.state" class="m-2" placeholder="产品状态">
+      <el-form-item label="宠物状态" :label-width="formLabelWidth">
+        <el-select v-model="form.state" class="m-2" placeholder="宠物状态">
           <el-option
               v-for="item in states"
               :key="item.id"
@@ -134,7 +144,7 @@
 <script>
 import {onMounted, reactive, ref} from "vue";
 import {ElMessage, ElMessageBox} from "element-plus";
-import {addOrEdit, loadAll, delProduct, removeAll} from "@/api/product";
+import {addOrEdit, loadAll, removeAll} from "@/api/petsearch";
 
 export default {
   setup() {
@@ -189,7 +199,7 @@ export default {
       })
 
       ElMessageBox.confirm(
-          '确认删除所选产品吗？',
+          '确认删除所选宠物吗？',
           '批量删除',
           {
             confirmButtonText: '确定',
@@ -226,13 +236,13 @@ export default {
       multipleSelection.value = val
     }
 
-    //添加产品
+    //添加宠物
     const add = () => {
       //显示模态框
       dialogFormVisible.value = true
 
       //改变表单标题
-      title.value = '添加产品'
+      title.value = '添加宠物'
 
       //清空表单数据
       form.id = ''
@@ -296,7 +306,7 @@ export default {
       dialogFormVisible.value = true
 
       //设置模态框标题
-      title.value = '编辑产品'
+      title.value = '编辑宠物'
 
       //将数据回写到模态框表单中
       form.id = row.id
@@ -348,7 +358,7 @@ export default {
 
     //删除事件
     const handleDelete = (index, row) => {
-      delProduct(row.id/*,row.logo*/).then(res => {
+      remove(row.id/*,row.logo*/).then(res => {
         ElMessage.success(res.msg)
         load(currentPage4.value, pageSize4.value)
       }).catch(e => {

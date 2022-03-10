@@ -83,7 +83,7 @@ export const dynamicRoutes = [
       title: '组织机构',
       icon: 'el-icon-menu',
     },
-    redirect: '/Admin/dept',
+    redirect: '/admin/dept',
     children: [
       {
         path: 'dept',
@@ -110,24 +110,6 @@ export const dynamicRoutes = [
         meta: { title: '权限管理', noCache: true ,icon: 'el-icon-lock'},
       },
       {
-        path: 'shop',
-        component: () => import('@/views/shop/index'),
-        name: 'Shop',
-        meta: { title: '店铺管理', noCache: true ,icon: 'el-icon-s-shop'},
-      },
-      {
-        path: 'product',
-        component: () => import('@/views/product/index'),
-        name: 'Product',
-        meta: { title: '产品管理', noCache: true ,icon: 'el-icon-shopping-cart-full'},
-      },
-      {
-        path: 'add',
-        component: () => import('@/views/shop/add'),
-        name: 'Add',
-        meta: { title: '店铺申请', noCache: true ,icon: 'el-icon-circle-plus'},
-      },
-      {
         path: 'menu',
         component: () => import('@/views/table/index'),
         name: 'Menu',
@@ -139,11 +121,65 @@ export const dynamicRoutes = [
         name: 'Icon',
         meta: { title: '图标', noCache: true ,icon: 'el-icon-star-on'},
       },
+    ],
+  },
+  {
+    path: '/shop',
+    component: Layout,
+    redirect: '/shop/index',
+    meta: {
+      title: '店铺管理',
+      icon: 'el-icon-s-shop',
+    },
+    name: 'Shop',
+    children: [
       {
-        path: 'tinymce',
-        component: () => import('@/views/tinymce/index'),
-        name: 'tinymce',
-        meta: { title: '富文本', noCache: true ,icon: 'el-icon-warning'},
+        name: 'index',
+        path: 'index',
+        component: () => import('@/views/shop/index'),
+        meta: { title: '店铺管理', icon: 'el-icon-house', affix: true },
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/shop/add'),
+        name: 'Add',
+        meta: { title: '店铺申请', noCache: true ,icon: 'el-icon-circle-plus'},
+      },
+    ],
+  },
+  {
+    path: '/product',
+    component: Layout,
+    meta: {
+      title: '产品管理',
+      icon: 'el-icon-shopping-cart-full',
+    },
+    redirect: '/product/index',
+    name: 'Product',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/product/index'),
+        name: 'Product',
+        meta: { title: '产品管理', noCache: true ,icon: 'el-icon-shopping-cart-full'},
+      },
+    ],
+  },
+  {
+    path: '/petSearch',
+    component: Layout,
+    meta: {
+      title: '宠物管理',
+      icon: 'el-icon-money',
+    },
+    redirect: '/petSearch/index',
+    name: 'PetSearch',
+    children: [
+      {
+        path: 'index',
+        component: () => import('@/views/petsearch/index'),
+        name: 'PetSearch',
+        meta: { title: '宠物寻主', noCache: true ,icon: 'el-icon-money'},
       },
     ],
   },

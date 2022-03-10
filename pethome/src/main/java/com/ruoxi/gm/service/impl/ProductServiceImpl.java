@@ -34,7 +34,6 @@ public class ProductServiceImpl implements IProductService {
     @Transactional
     public void add(Product p) {
         mapper.save(p);
-        p.getProductDetail().setProduct_id(p.getId());
         pdmapper.save(p.getProductDetail());
     }
 

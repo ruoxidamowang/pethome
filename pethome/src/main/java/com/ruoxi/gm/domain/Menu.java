@@ -3,6 +3,7 @@ package com.ruoxi.gm.domain;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author 若兮
@@ -15,5 +16,5 @@ public class Menu implements Serializable {
     private String url;
     private String icon;
     private Integer index;
-    private Menu parent;
+    private List<Menu> children;
 }
