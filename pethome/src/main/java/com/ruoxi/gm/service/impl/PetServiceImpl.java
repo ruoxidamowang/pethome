@@ -3,10 +3,10 @@ package com.ruoxi.gm.service.impl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.ruoxi.gm.domain.SearchMasterMsg;
-import com.ruoxi.gm.mapper.PetSearchMapper;
-import com.ruoxi.gm.query.PetSearchQuery;
-import com.ruoxi.gm.service.IPetSearchService;
+import com.ruoxi.gm.domain.Pet;
+import com.ruoxi.gm.mapper.PetMapper;
+import com.ruoxi.gm.query.PetQuery;
+import com.ruoxi.gm.service.IPetService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,18 +17,18 @@ import java.util.List;
 
 /**
  * @author 若兮
- * @create 2022-03-09 16:45
+ * @create 2022-03-10 14:33
  */
 @Service
 @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-public class PetSearchServiceImpl implements IPetSearchService {
+public class PetServiceImpl implements IPetService {
     @Resource
-    private PetSearchMapper mapper;
+    private PetMapper mapper;
 
     @Override
     @Transactional
-    public void add(SearchMasterMsg smm) {
-        mapper.save(smm);
+    public void add(Pet p) {
+        mapper.save(p);
     }
 
     @Override
@@ -39,15 +39,15 @@ public class PetSearchServiceImpl implements IPetSearchService {
 
     @Override
     @Transactional
-    public void update(SearchMasterMsg smm) {
-        mapper.update(smm);
+    public void update(Pet p) {
+        mapper.update(p);
     }
 
     @Override
-    public PageInfo<SearchMasterMsg> findByPage(PetSearchQuery query) {
+    public PageInfo<Pet> findByPage(PetQuery query) {
         PageHelper.startPage(query.getStart(), query.getPageSize());
-        List<SearchMasterMsg> msgs = mapper.loadAll(query);
-        Page<SearchMasterMsg> page= (Page<SearchMasterMsg>) msgs;
+        List<Pet> shops = mapper.loadAll(query);
+        Page<Pet> page= (Page<Pet>) shops;
         return page.toPageInfo();
     }
 
@@ -55,5 +55,10 @@ public class PetSearchServiceImpl implements IPetSearchService {
     @Transactional
     public void removeAll(ArrayList<Long> ids) {
         mapper.dels(ids);
+    }
+
+    @Override
+    public Pet findPetById(Long id) {
+        return mapper.findPetById(id);
     }
 }

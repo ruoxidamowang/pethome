@@ -54,8 +54,8 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public PageInfo<Product> findByPage(ProductQuery query) {
         PageHelper.startPage(query.getStart(), query.getPageSize());
-        List<Product> shops = mapper.loadAll(query);
-        Page<Product> page= (Page<Product>) shops;
+        List<Product> products = mapper.loadAll(query);
+        Page<Product> page= (Page<Product>) products;
         return page.toPageInfo();
     }
 
