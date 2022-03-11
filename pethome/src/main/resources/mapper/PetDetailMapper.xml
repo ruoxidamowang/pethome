@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoxi.gm.mapper.PetDetailMapper">
+    <resultMap id="pet_map" type="com.ruoxi.gm.domain.Pet">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="saleprice" column="saleprice"/>
+        <result property="costprice" column="costprice"/>
+        <result property="resources" column="resources"/>
+        <result property="state" column="state"/>
+        <result property="offsaletime" column="offsaletime"/>
+        <result property="onsaletime" column="onsaletime"/>
+        <result property="createtime" column="createtime"/>
+        <association property="petType" javaType="com.ruoxi.gm.domain.PetType">
+            <id property="id" column="type_id"/>
+            <result property="name" column="typeName"/>
+        </association>
+        <association property="user" javaType="com.ruoxi.gm.domain.User">
+            <id property="id" column="user_id"/>
+        </association>
+        <association property="shop" javaType="com.ruoxi.gm.domain.Shop">
+            <id property="id" column="shop_id"/>
+        </association>
+        <association property="searchMasterMsg" javaType="com.ruoxi.gm.domain.SearchMasterMsg">
+            <id property="id" column="search_master_msg_id"/>
+        </association>
+    </resultMap>
+
+    <!--void save(Pet p);-->
+    <insert id="save">
+        insert into t_pet(name, saleprice, costprice, resources, state, type_id, offsaletime, onsaletime, createtime,
+                          shop_id, user_id, search_master_msg_id)
+        values (#{name}, #{age}, #{gender}, #{coat_color}, #{resources}, #{petType.id}, #{price},
+                #{address}, #{state}, #{title}, #{user.id},
+                #{shop.id})
+    </insert>
+
+    <!--void remove(Long id);-->
+    <delete id="remove">
+        delete
+        from t_pet
+        where id = #{id}
+    </delete>
+
+    <!--void update(Pet p);-->
+    <update id="update">
+        update t_pet
+        set name       = #{name},
+            saleprice        = #{saleprice},
+            costprice     = #{costprice},
+            resources  = #{resources},
+            state   = #{state},
+            type_id      = #{petType.id},
+            offsaletime    = #{offsaletime},
+            onsaletime      = #{onsaletime},
+            createtime      = #{createtime},
+            shop_id    = #{shop.id},
+            user_id    = #{user.id},
+            search_master_msg_id    = #{searchMasterMsg.id}
+        where id = #{id}
+    </update>
+
+    <!--List<Pet> loadAll(PetQuery query);-->
+    <select id="loadAll" resultMap="pet_map">
+        SELECT
+            p.*,
+            pt.`name` typeName,
+            pd.id pdid,
+            pd.adoptNotice,
+            pd.intro
+        FROM
+            t_pet p
+            LEFT JOIN t_pet_detail pd ON p.id = pd.pet_id
+            LEFT JOIN t_pet_type pt ON p.type_id = pt.id
+        <where>
+            <if test="name != null and name.trim() != ''">
+                and p.name like concat('%',#{name},'%')
+            </if>
+            <if test="state != null">
+                and p.state = #{state}
+            </if>
+        </where>
+    </select>
+
+    <!--void dels(ArrayList<Long> ids);-->
+    <delete id="dels">
+        delete
+        from t_pet
+        where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectAll" resultMap="pet_map">
+
+    </select>
+
+    <select id="findPetById" resultMap="pet_map">
+        SELECT
+            p.*,
+            pt.`name` typeName,
+            pd.id pdid,
+            pd.adoptNotice,
+            pd.intro
+        FROM
+            t_pet p
+                LEFT JOIN t_pet_detail pd ON p.id = pd.pet_id
+                LEFT JOIN t_pet_type pt ON p.type_id = pt.id
+        where p.id = #{id}
+    </select>
+</mapper>
