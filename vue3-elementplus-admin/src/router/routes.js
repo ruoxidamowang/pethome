@@ -78,7 +78,7 @@ export const dynamicRoutes = [
   {
     path: '/admin',
     component: Layout,
-    name: 'Admin',
+    name: 'admin',
     meta: {
       title: '组织机构',
       icon: 'el-icon-menu',
@@ -93,13 +93,13 @@ export const dynamicRoutes = [
       },
       {
         path: 'emp',
-        component: () => import('@/views/table/inline-edit-table'),
+        component: () => import('@/views/emp/index'),
         name: 'Emp',
         meta: { title: '员工管理', noCache: true ,icon: 'el-icon-s-custom'},
       },
       {
         path: 'role',
-        component: () => import('@/views/button/index'),
+        component: () => import('@/views/role/index'),
         name: 'Role',
         meta: { title: '角色管理', noCache: true,icon: 'el-icon-user' },
       },
@@ -111,22 +111,16 @@ export const dynamicRoutes = [
       },
       {
         path: 'menu',
-        component: () => import('@/views/table/index'),
+        component: () => import('@/views/emp/index'),
         name: 'Menu',
         meta: { title: '菜单管理', noCache: true ,icon: 'el-icon-s-grid'},
-      },
-      {
-        path: 'icon',
-        component: () => import('@/views/icons/index'),
-        name: 'Icon',
-        meta: { title: '图标', noCache: true ,icon: 'el-icon-star-on'},
       },
     ],
   },
   {
     path: '/shop',
     component: Layout,
-    redirect: '/shop/index',
+    redirect: '/shop/add',
     meta: {
       title: '店铺管理',
       icon: 'el-icon-s-shop',
@@ -151,7 +145,7 @@ export const dynamicRoutes = [
     path: '/product',
     component: Layout,
     meta: {
-      title: '产品管理',
+      title: '商品管理',
       icon: 'el-icon-shopping-cart-full',
     },
     redirect: '/product/index',
@@ -161,7 +155,7 @@ export const dynamicRoutes = [
         path: 'index',
         component: () => import('@/views/product/index'),
         name: 'Product',
-        meta: { title: '产品管理', noCache: true ,icon: 'el-icon-shopping-cart-full'},
+        meta: { title: '商品管理', noCache: true ,icon: 'el-icon-shopping-cart-full'},
       },
     ],
   },
@@ -180,6 +174,12 @@ export const dynamicRoutes = [
         component: () => import('@/views/petsearch/index'),
         name: 'PetSearch',
         meta: { title: '宠物寻主', noCache: true ,icon: 'el-icon-money'},
+      },
+      {
+        path: 'icon',
+        component: () => import('@/views/icons/index'),
+        name: 'Icon',
+        meta: { title: '图标', noCache: true ,icon: 'el-icon-star-on'},
       },
     ],
   },

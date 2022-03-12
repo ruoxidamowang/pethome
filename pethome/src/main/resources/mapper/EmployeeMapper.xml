@@ -3,15 +3,96 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoxi.gm.mapper.EmployeeMapper">
+    <resultMap id="emp_map" type="com.ruoxi.gm.query.EmployeeQuery">
+        <id property="id" column="id"/>
+        <result property="username" column="username"/>
+        <result property="email" column="email"/>
+        <result property="phone" column="phone"/>
+        <result property="age" column="age"/>
+        <result property="state" column="state"/>
+        <association property="department" javaType="department">
+            <id property="id" column="did"/>
+            <result property="name" column="dname"/>
+        </association>
+        <association property="shop" javaType="shop">
+            <id property="id" column="sid"/>
+            <result property="name" column="sname"/>
+        </association>
+        <association property="role" javaType="role">
+            <id property="id" column="rid"/>
+            <result property="name" column="rname"/>
+        </association>
+    </resultMap>
+
     <!--void save(Employee e);-->
     <insert id="save" useGeneratedKeys="true" keyProperty="id">
-        insert into t_employee (username, email, phone, salt, password, age, state, department_id, logininfo_id, shop_id)
-        values (#{username},#{email},#{phone},#{salt},#{password},#{age},#{state},#{department.id},#{logininfo.id},#{shop.id});
+        insert into t_employee (username, email, phone, salt, password, age, state, department_id, logininfo_id,
+                                shop_id)
+        values (#{username}, #{email}, #{phone}, #{salt}, #{password}, #{age}, #{state}, #{department.id},
+                #{logininfo.id}, #{shop.id});
     </insert>
+
+    <insert id="addRole">
+        insert into t_employee_role (employee_id, role_id)
+        values (#{id},#{role.id})
+    </insert>
+
+    <delete id="remove">
+        delete
+        from t_employee
+        where id = #{id}
+    </delete>
+
+    <delete id="dels">
+        delete
+        from t_employee
+        where id in
+        <foreach collection="list" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+    <delete id="removeRole">
+        delete
+        from t_employee_role
+        where employee_id = #{id}
+    </delete>
 
     <!--List<Employee> loadAllEmp();-->
     <select id="loadAllEmp" resultType="com.ruoxi.gm.domain.Employee">
-        select id, username, email, phone, salt, password, age, state, department_id, logininfo_id, shop_id
+        select id,
+               username,
+               email,
+               phone,
+               salt,
+               password,
+               age,
+               state,
+               department_id,
+               logininfo_id,
+               shop_id
         from t_employee
+    </select>
+
+    <select id="loadAll" resultMap="emp_map">
+        SELECT e.*,
+               d.id     did,
+               d.`name` dname,
+               s.id     sid,
+               s.`name` sname,
+               r.id     rid,
+               r.`name` rname
+        FROM t_employee e
+                 left JOIN t_employee_role er ON e.id = er.employee_id
+                 left join t_department d on e.department_id = d.id
+                 left join t_shop s on e.shop_id = s.id
+                 left JOIN t_role r ON er.role_id = r.id
+        <where>
+            <if test="username != null and username.trim() != ''">
+                and e.username like concat('%',#{username},'%')
+            </if>
+            <if test="state != null">
+                and e.state = #{state}
+            </if>
+        </where>
     </select>
 </mapper>

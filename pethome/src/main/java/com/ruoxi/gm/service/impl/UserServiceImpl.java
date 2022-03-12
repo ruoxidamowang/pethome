@@ -146,7 +146,7 @@ public class UserServiceImpl implements IUserService {
             list.add(map);
             map = new HashMap<>();
             map.put("path", "/admin");
-            map.put("name", "Admin");
+            map.put("name", "admin");
             list.add(map);
             map = new HashMap<>();
             map.put("path", "/shop");

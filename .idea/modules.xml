@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/pethome/pethome.iml" filepath="$PROJECT_DIR$/pethome/pethome.iml" />
+      <module fileurl="file://$PROJECT_DIR$/pethome/takeout.iml" filepath="$PROJECT_DIR$/pethome/takeout.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/vue-pethome-parent.iml" filepath="$PROJECT_DIR$/.idea/vue-pethome-parent.iml" />
     </modules>
   </component>
