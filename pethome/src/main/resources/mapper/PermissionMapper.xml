@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoxi.gm.mapper.PermissionMapper">
+    <resultMap id="menu_map" type="com.ruoxi.gm.domain.Menu">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="url" column="url"/>
+        <collection property="children" ofType="com.ruoxi.gm.domain.Menu">
+            <id property="id" column="mid"/>
+            <result property="name" column="mname"/>
+            <result property="url" column="murl"/>
+        </collection>
+    </resultMap>
+
+    <select id="selectAllPermission" resultMap="menu_map">
+        SELECT
+            m1.id ,
+            m1.`name`,
+            m1.url murl,
+            m2.id mid,
+            m2.url mmurl
+        FROM
+            t_menu m1
+                join t_menu m2
+        where m1.parent_id is null and m2.parent_id = m1.id
+    </select>
+</mapper>

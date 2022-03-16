@@ -16,5 +16,5 @@ public class Permission implements Serializable {
     private String url;
     private String descs;
     private String sn;
-    private List<Menu> menu;
+    private List<Permission> children;
 }

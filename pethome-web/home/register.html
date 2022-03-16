@@ -338,9 +338,9 @@
                     if (ceflag.value) {
                         if (checkEmail() && checkECode() && checkEPassword() && checkERePassword()) {
                             axios({
-                                url: "http://localhost:8080/user/register",
+                                url: "http://localhost:8080/user/register1",
                                 method: 'post',
-                                params: {
+                                data: {
                                     email: eform.email,
                                     code: eform.ecode,
                                     password: eform.epassword,
@@ -390,15 +390,19 @@
                             axios({
                                 url: "http://localhost:8080/user/register",
                                 method: 'post',
-                                params: {
+                                data: {
                                     phone: form.phone,
                                     code: form.code,
                                     password: form.password,
                                     repassword: form.repassword,
                                 }
                             }).then(res => {
-                                alert(res.data.msg)
-                                location.href = "/login.html"
+                                if (res.success){
+                                    alert(res.data.msg)
+                                    location.href = "/login.html"
+                                }else {
+                                    alert(res.data.msg)
+                                }
                             }).catch(e => {
                                 alert("注册失败" + e)
                             })

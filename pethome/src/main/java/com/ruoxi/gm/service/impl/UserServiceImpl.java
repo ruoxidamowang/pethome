@@ -150,15 +150,15 @@ public class UserServiceImpl implements IUserService {
             list.add(map);
             map = new HashMap<>();
             map.put("path", "/shop");
-            map.put("name", "Shop");
+            map.put("name", "shop");
             list.add(map);
             map = new HashMap<>();
             map.put("path", "/product");
-            map.put("name", "Product");
+            map.put("name", "product");
             list.add(map);
             map = new HashMap<>();
             map.put("path", "/petSearch");
-            map.put("name", "PetSearch");
+            map.put("name", "petSearch");
             list.add(map);
             info.setMenuList(list);
             return Result.me(info);

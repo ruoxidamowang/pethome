@@ -12,6 +12,7 @@ import java.util.List;
 public interface RoleMapper {
     void save(Role r);
     void remove(Long id);
+    void removeEmpRole(Long id);
     void update(Role r);
     List<Role> loadAll(RoleQuery query);
 

@@ -88,32 +88,20 @@ export const dynamicRoutes = [
       {
         path: 'dept',
         component: () => import('@/views/dept/index'),
-        name: 'Dept',
+        name: 'dept',
         meta: { title: '部门管理', noCache: true ,icon: 'el-icon-guide'},
       },
       {
         path: 'emp',
         component: () => import('@/views/emp/index'),
-        name: 'Emp',
+        name: 'emp',
         meta: { title: '员工管理', noCache: true ,icon: 'el-icon-s-custom'},
       },
       {
         path: 'role',
         component: () => import('@/views/role/index'),
-        name: 'Role',
+        name: 'role',
         meta: { title: '角色管理', noCache: true,icon: 'el-icon-user' },
-      },
-      {
-        path: 'permission',
-        component: () => import('@/views/Tree/index'),
-        name: 'Permission',
-        meta: { title: '权限管理', noCache: true ,icon: 'el-icon-lock'},
-      },
-      {
-        path: 'menu',
-        component: () => import('@/views/emp/index'),
-        name: 'Menu',
-        meta: { title: '菜单管理', noCache: true ,icon: 'el-icon-s-grid'},
       },
     ],
   },
@@ -125,7 +113,7 @@ export const dynamicRoutes = [
       title: '店铺管理',
       icon: 'el-icon-s-shop',
     },
-    name: 'Shop',
+    name: 'shop',
     children: [
       {
         name: 'index',
@@ -136,7 +124,7 @@ export const dynamicRoutes = [
       {
         path: 'add',
         component: () => import('@/views/shop/add'),
-        name: 'Add',
+        name: 'add',
         meta: { title: '店铺申请', noCache: true ,icon: 'el-icon-circle-plus'},
       },
     ],
@@ -149,13 +137,19 @@ export const dynamicRoutes = [
       icon: 'el-icon-shopping-cart-full',
     },
     redirect: '/product/index',
-    name: 'Product',
+    name: 'product',
     children: [
       {
         path: 'index',
         component: () => import('@/views/product/index'),
-        name: 'Product',
+        name: 'product',
         meta: { title: '商品管理', noCache: true ,icon: 'el-icon-shopping-cart-full'},
+      },
+      {
+        path: 'menu',
+        component: () => import('@/views/directives/index'),
+        name: 'menu',
+        meta: { title: '菜单管理', noCache: true ,icon: 'el-icon-s-grid'},
       },
     ],
   },
@@ -167,18 +161,18 @@ export const dynamicRoutes = [
       icon: 'el-icon-money',
     },
     redirect: '/petSearch/index',
-    name: 'PetSearch',
+    name: 'petSearch',
     children: [
       {
         path: 'index',
         component: () => import('@/views/petsearch/index'),
-        name: 'PetSearch',
+        name: 'petSearch',
         meta: { title: '宠物寻主', noCache: true ,icon: 'el-icon-money'},
       },
       {
         path: 'icon',
         component: () => import('@/views/icons/index'),
-        name: 'Icon',
+        name: 'icon',
         meta: { title: '图标', noCache: true ,icon: 'el-icon-star-on'},
       },
     ],

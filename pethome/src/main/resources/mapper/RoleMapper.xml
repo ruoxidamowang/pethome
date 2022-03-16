@@ -18,6 +18,12 @@
         from t_role
         where id = #{id};
     </delete>
+    <delete id="removeEmpRole">
+        delete
+        from t_employee_role
+        where role_id = #{id};
+    </delete>
+
     <select id="selectAllRole" resultType="role">
         select *
         from t_role

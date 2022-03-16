@@ -33,6 +33,7 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     @Transactional
     public void del(Long id) {
+        mapper.removeEmpRole(id);
         mapper.remove(id);
     }
 

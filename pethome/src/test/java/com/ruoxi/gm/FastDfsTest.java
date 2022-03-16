@@ -24,7 +24,7 @@ public class FastDfsTest {
 
     @Test
     public void upload() throws FileNotFoundException {
-        StorePath path = fastFileStorageClient.uploadFile(new FileInputStream("D:\\test\\bizhi.jpg"), 637344, ".jpg", null);
+        StorePath path = fastFileStorageClient.uploadFile(new FileInputStream("D:\\test\\aaa.png"), 2015885, ".png", null);
         System.out.println(path);
     }
 }

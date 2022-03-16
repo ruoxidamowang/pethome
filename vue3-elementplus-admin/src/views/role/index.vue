@@ -5,10 +5,10 @@
       <el-input v-model="formInline.name" placeholder="角色名称" clearable></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="query">查询</el-button>
+      <el-button round type="primary" @click="query">查询</el-button>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="add">添加</el-button>
+      <el-button round type="primary" @click="add">添加</el-button>
     </el-form-item>
   </el-form>
 
@@ -19,7 +19,8 @@
     <el-table-column prop="sn" label="角色介绍"/>
     <el-table-column label="操作">
       <template #default="scope">
-        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+        <el-button round size="small" type="success" @click="changePermission(scope.$index, scope.row)">修改权限</el-button>
+        <el-button round size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
         <el-popconfirm title="确定要删除吗?"
                        confirm-button-text="确定"
                        cancel-button-text="取消"
@@ -27,7 +28,7 @@
                        icon-color="red"
                        @confirm="handleDelete(scope.$index, scope.row)">
           <template #reference>
-            <el-button size="small" type="danger">删除</el-button>
+            <el-button round size="small" type="danger">删除</el-button>
           </template>
         </el-popconfirm>
       </template>
@@ -70,6 +71,34 @@
     </template>
   </el-dialog>
 
+  <!--权限修改模态框-->
+  <el-dialog v-model="dialogVisible" title="修改权限">
+    <div>
+      <TBTree
+          ref="TBTreeRef"
+          :data="projectMenu"
+          :activeId="activeProjectMenu.id"
+          :defaultExpandedKeys="['1', '2']"
+          :props="{
+				label: 'name'
+			}"
+          showCheckbox
+          @nodeClick="handleNode"
+          @nodeExpand="nodeExpand"
+          @checkChange="checkChange"
+      >
+      </TBTree>
+      <el-button type="primary" @click="getCheckedKeys">获取选中节点</el-button>
+      <el-button type="primary" @click="setCheckedKeys">设置节点选中</el-button>
+      <el-button type="primary" @click="resetChecked">清空选中</el-button>
+    </div>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogVisible = false">关闭</el-button>
+        <el-button type="primary" @click="getCheckedKeys">保存</el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 <script>
 import {onMounted, reactive, ref} from "vue";
@@ -99,6 +128,7 @@ export default {
     const parent = ref('')
 
     const dialogFormVisible = ref(false)
+    const dialogVisible = ref(false)
     const formLabelWidth = '140px'
 
     const form = reactive({
@@ -191,7 +221,7 @@ export default {
           ElMessage.success("修改成功")
           load(currentPage4.value, pageSize4.value)
         } else {
-          ElMessage.error("修改失败"+res.msg)
+          ElMessage.error("修改失败" + res.msg)
         }
       }).catch(e => {
         ElMessage.error("修改失败" + e)
@@ -208,7 +238,88 @@ export default {
       })
     }
 
+    const changePermission = (index, row) => {
+      dialogVisible.value = true
+
+    }
+
+    const activeProjectMenu = reactive({
+      icon: 'el-icon-office-building',
+      menuName: '第一工程处-1-1-2-3-2',
+      id: '1-1-2-3-2'
+    })
+
+    const projectMenu = ref([
+      {
+        id: '1',
+        name: '第一工程处-1',
+        children: [
+          {
+            name: '第一工程处1-1',
+            id: '1-1',
+          },
+          {
+            id: '1-2',
+            name: '第一工程处1-2'
+          }
+        ]
+      },
+      {
+        id: '2',
+        name: '第二工程处-2',
+        children: [
+          {
+            id: '2-1',
+            name: '第二工程处2-1'
+          },
+          {
+            id: '2-2',
+            name: '第二工程处2-2'
+          }
+        ]
+      },
+    ])
+
+    const TBTreeRef = ref(null)
+
+    //节点被点击回调
+    function handleNode(node) {
+      // console.log('点击节点回调--', node)
+      activeProjectMenu.path = node.path
+      activeProjectMenu.name = node.name
+      activeProjectMenu.isActive = node.isActive
+      activeProjectMenu.id = node.id
+    }
+
+    // 节点被展开回调
+    function nodeExpand(expanded, node) {
+      // console.log('展开节点回调--', { expanded, node })
+    }
+
+    // 节点被选中状态变化回调
+    function checkChange(node, checked, indeterminate) {
+      // console.log(node, checked, indeterminate)
+    }
+
+    // 获取选中节点
+    function getCheckedKeys() {
+      dialogVisible.value = false
+      const nodeKeys = TBTreeRef.value.getCheckedKeys()
+      console.log('nodeKeys---', nodeKeys)
+    }
+
+    //设置节点选中
+    function setCheckedKeys() {
+      TBTreeRef.value.setCheckedKeys(['1-1', '2-1', '1-2'])
+    }
+
+    // 清空节点
+    function resetChecked() {
+      TBTreeRef.value.setCheckedKeys([])
+    }
+
     return {
+      changePermission,
       title,
       multipleTableRef,
       pid,
@@ -234,6 +345,16 @@ export default {
       tableData,
       formInline,
       query,
+      dialogVisible,
+      TBTreeRef,
+      activeProjectMenu,
+      projectMenu,
+      handleNode,
+      nodeExpand,
+      checkChange,
+      getCheckedKeys,
+      setCheckedKeys,
+      resetChecked,
     }
   }
 }

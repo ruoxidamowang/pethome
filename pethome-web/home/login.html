@@ -86,7 +86,6 @@
                     }
                 }).then(res => {
                     if (res.data.success) {
-                        alert(res.data.data.token)
                         localStorage.setItem("X-token", res.data.data.token)
                         localStorage.setItem("username", form.username)
                         location.href = "../home/index.html"

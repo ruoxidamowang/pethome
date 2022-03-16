@@ -303,40 +303,6 @@
 
         </form>
     </div>
-
-    <script>
-        Vue.createApp({
-            setup() {
-                const pet = Vue.reactive({
-                    id:'',
-                    name:'',
-                    resources:'',
-                    saleprice:'',
-                })
-                const load = (id) => {
-                    axios({
-                        url: 'http://localhost:8080/pet/'+id,
-                        method: 'get',
-                        headers:{
-                            "X-token":localStorage.getItem("X-token")
-                        }
-                    }).then(res => {
-                        pet.id = res.data.data.id
-                        pet.name = res.data.data.name
-                        pet.resources = res.data.data.resources
-                        pet.saleprice = res.data.data.saleprice
-                    })
-                }
-                Vue.onMounted(() => {
-                    let id = localStorage.getItem("petId")
-                    load(id)
-                })
-                return {
-                    pet,
-                }
-            }
-        }).mount("#app")
-    </script>
 </div>
 
 </dd>
@@ -1385,5 +1351,37 @@
 </div>
 
 </body>
-
+<script>
+    Vue.createApp({
+        setup() {
+            const pet = Vue.reactive({
+                id:'',
+                name:'',
+                resources:'',
+                saleprice:'',
+            })
+            const load = (id) => {
+                axios({
+                    url: 'http://localhost:8080/pet/'+id,
+                    method: 'get',
+                    headers:{
+                        "X-token":localStorage.getItem("X-token")
+                    }
+                }).then(res => {
+                    pet.id = res.data.data.id
+                    pet.name = res.data.data.name
+                    pet.resources = res.data.data.resources
+                    pet.saleprice = res.data.data.saleprice
+                })
+            }
+            Vue.onMounted(() => {
+                let id = localStorage.getItem("petId")
+                load(id)
+            })
+            return {
+                pet,
+            }
+        }
+    }).mount("#app")
+</script>
 </html>
