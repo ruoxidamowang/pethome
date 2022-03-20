@@ -48,8 +48,8 @@ fdfs:
   connect-timeout: 6000
   # 缩略图
   thumb-image:
-  width: 150
-  height: 150
+    width: 150
+    height: 150
   # Tracker 服务，确保 tracker storage nginx 已经启动
   tracker-list:
     - 34.80.47.178:22122
